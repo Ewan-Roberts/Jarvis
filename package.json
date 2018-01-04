@@ -1,0 +1,40 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bindings": "^1.3.0",
+    "chai": "^4.1.2",
+    "cheerio": "^1.0.0-rc.2",
+    "ejs": "^2.5.7",
+    "expect": "^22.0.3",
+    "express": "^3.21.2",
+    "jade": "*",
+    "johnny-five": "^0.11.7",
+    "moment": "^2.20.1",
+    "mongodb": "^3.0.1",
+    "monk": "^6.0.5",
+    "request": "^2.83.0",
+    "rewire": "^3.0.2",
+    "serialport": "^5.0.0",
+    "serve-favicon": "^2.4.5",
+    "sinon": "^4.1.3",
+    "socket.io": "^2.0.4",
+    "spotify-node-applescript": "^1.1.0",
+    "tracer": "^0.7.4"
+  },
+  "main": "junk.js",
+  "devDependencies": {
+    "mocha": "^2.5.3",
+    "mock-firmata": "^0.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/Users/ewan/Dropbox/newrepo/28may"
+  },
+  "author": "",
+  "license": "ISC"
+}

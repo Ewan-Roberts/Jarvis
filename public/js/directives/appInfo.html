@@ -1,0 +1,15 @@
+<div class = "weatherTab">
+
+    <div class = "day">{{info.dt * 1000 | date : 'EEEE'}}</div>
+
+    <div class = "location">London</div>
+
+    <div class = "icon">
+
+        <img ng-src = "{{info.source}}">
+
+    </div>
+    
+    <div class = "temperature">{{info.temp.day + "℃"}}</div>
+
+</div>

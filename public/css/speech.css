@@ -1,0 +1,344 @@
+html {
+
+  font-family: 'Helvetica Neue', sans-serif;
+
+}
+
+
+.meter {
+  height: 200px;
+  width: 200px;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  margin-top: 5%;
+  margin-left: 43%;
+}
+
+
+.bar {
+  border-radius: 50%;
+  width: 1%;
+  height: 1%;
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+  margin-top: 50%;
+  margin-left: 50%;
+  background: blue;
+  -webkit-transform:scale(2, 2);
+}
+
+body {
+
+  margin: 0px;
+}
+
+.voiceMatch {
+
+  text-align: center;
+  margin-top: 2%;
+  color: #685206;
+  font-size: 24px;
+  line-height: 30px;
+  text-justify: inter-word;
+
+}
+
+.musicPlayer {
+
+  width: 100%;
+  height: 40px;
+  background-color: black;
+  top: 0;
+
+}
+
+.musicHolder { 
+
+  height: 100%;
+  background-color: black;
+  float: left;
+  width: 600px;
+
+}
+
+.musicState {
+
+  color: white;
+  font-size: 15px;
+  float: left;
+  width: 40px;
+  height: 100%;
+  background: red;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+
+}
+
+.musicNext {
+
+  color: white;
+  font-size: 15px;
+  float: left;
+  width: 40px;
+  height: 100%;
+  background: grey;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+
+}
+
+.musicPrevious {
+
+  color: white;
+  font-size: 15px;
+  float: left;
+  width: 40px;
+  height: 100%;
+  background: grey;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+
+}
+
+.musicName {
+
+  float: left;
+  width: 200px;
+  height: 100%;
+  vertical-align: middle;
+  background: black;
+  color: white;
+  display: flex;
+  margin-left: 10px;
+  align-items: center; /* align vertical */
+
+}
+
+.currentTime {
+
+  float: right;
+  color: white;
+  font-size: 18px;
+  height: 100%;
+  display: flex;
+  margin-right: 10px;
+  align-items: center; /* align vertical */
+}
+
+.totalTime {
+
+  float: left;
+}
+
+.timeDivider {
+
+  float: left;
+
+}
+
+
+.leftTab {
+
+  display: none;
+  position: absolute;
+  float: left;
+  width: 400px;
+  height: 100%;
+  overflow: auto;
+  background-color: grey;
+  font-family: sans-serif;
+  
+}
+
+.leftTab .newsStory {
+
+  width: 93%;
+  overflow: auto;
+  padding: 2%;
+  margin: 1%;
+  background-color: white;
+
+}
+
+.newsStory img {
+
+  display: block;
+  float: left;
+  width: 25%;
+
+
+}
+
+.newsStory h3 {
+
+  display: block;
+  font-size: 1em;
+  width: 70%;
+  padding-left: 5%;
+  float: left;
+  margin-top: 0px;
+  margin-bottom: 5px;
+
+}
+
+.newsStory a {
+  font-size: 0.8em;
+  width: 70%;
+  padding-left: 5%;
+  float: left;
+
+}
+
+.leftTab .artist {
+  float: left;
+  width: 41%;
+  overflow: auto;
+  padding: 2%;
+  margin: 2%;
+  background-color: white;
+
+}
+
+.artist .overlay {
+
+  padding-left: 10px;
+  padding-top: 10px;
+  font-size: 40px;
+  position: absolute;
+  opacity: 0.5;
+
+}
+
+.artist img {
+
+  width: 100%;
+  height: 150px;
+  display: flex;
+  align-items: center; /* align vertical */
+  background-color: green;
+  float: left;
+
+}
+
+.artist h3 {
+
+  font-size: 1em;
+  width: 100%;
+  float: left;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+
+}
+
+.artist a {
+  font-size: 0.8em;
+  width: 70%;
+  padding-left: 5%;
+  float: left;
+
+}
+
+.clock {
+
+  text-align: center;
+  margin-top: 2%;
+  color: #685206;
+  font-size: 30px;
+  line-height: 24px;
+  text-justify: inter-word;
+
+}
+
+#security {
+
+  text-align: center;
+  margin-top: 2%;
+
+
+}
+
+.timingHousing {
+
+  float: left;
+  width: 250px;
+  height: 100%;
+  background-color: black;
+
+
+}
+
+.timing {
+
+  float: left;
+  width: 0px;
+  margin-top: 2px;
+  margin-bottom: 3px;
+  height: 90%;
+  background-color: white;
+
+}
+
+.weatherHolder {
+
+  float: right;
+  width: 200px;
+
+}
+
+.weatherTab {
+
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #D3D3D3;
+  float: right;
+  height: 100px;
+  width: 180px;
+
+
+}
+
+.weatherTab .day {
+
+  font-size: 2em;
+  float: left;
+  height: 35px;
+  width: 100%;
+
+}
+
+.weatherTab .location {
+  
+  color: grey;
+
+}
+
+.weatherTab .temperature {
+  
+  padding-top: 5px;
+  padding-left: 5px;
+  float: left;
+  color: #FFFBFF;
+  font-size: 30px;
+
+}
+
+.weatherTab .icon {
+  
+
+  float: left;
+
+}
+
+.weatherTab #iconImage {
+  
+  height: 50px;
+  width: 50px;
+  float: left;
+
+}
