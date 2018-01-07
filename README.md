@@ -1,11 +1,17 @@
 
+Jarvis is a home automation platform running on Node.js. It is able to track movement, respond to commands and provide useful functionality to make everything from waking up in the mornig to coming home more automated and interesting.
+
 
 ## Getting Started
 
-Download/Pull the files above and download the required node packages
+
+To get started clone the repository and install the required dependencies:
 
 ```
-sudo npm install
+git clone https://github.com/vanguard12/Jarvis.git
+
+npm install
+
 ```
 
 ### Prerequisites
@@ -21,6 +27,13 @@ You will require an API key from both the new york times and open weather. These
 api.openweathermap.org
 
 api.nytimes.com
+
+### Hardware
+
+For this module a Macbook through an Ardino Mega is the controlling unit. Additional modules connect through the local network and share socket sessions for sharing functionality. 
+
+The wiring looks like:
+
 
 
 ### Installing
