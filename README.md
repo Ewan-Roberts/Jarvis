@@ -34,7 +34,7 @@ For this module a Macbook through an Ardino Mega is the controlling unit. Additi
 
 The wiring looks like:
 
-
+![fritzing version of hardware set up](http://url/to/img.pnghttps://github.com/vanguard12/Jarvis/blob/master/public/images/jarvis_hardware.jpg)
 
 ### Installing
 
