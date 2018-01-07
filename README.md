@@ -33,8 +33,7 @@ api.nytimes.com
 For this module a Macbook through an Ardino Mega is the controlling unit. Additional modules connect through the local network and share socket sessions for sharing functionality. 
 
 The wiring looks like:
-
-![fritzing version of hardware set up](http://url/to/img.pnghttps://github.com/vanguard12/Jarvis/blob/master/public/images/jarvis_hardware.jpg)
+![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
 
 ### Installing
 
