@@ -19,13 +19,13 @@ You will require the latest version of Node.js which you can download here: http
 
 Functionality for Spotify is using applescript and therefore this functonality will only work on macOS
 
-You will require an Ardino and servos set up on any light switches you would like to automate, more details of which can be found in the hardware section below. 
+You will require an Arduino and servos set up on any light switches you would like to automate, more details of which can be found in the hardware section below. 
 
-This projet is designed to be modular with aditional functionality being shared trhoguh sockets. Please refer to piServer for controls of the lights, more automated lights and the opening and closing of doors.
+This project is designed to be modular with aditional functionality being shared through sockets. Please refer to piServer for controls of the lights, more automated lights and the opening and closing of doors.
 
-I good understanding of http://johnny-five.io/ is highly reccomended for additional extentions. They have created a very use friendly and simple API. I suggest lookthing them up here: https://github.com/rwaldron/johnny-five
+A good understanding of http://johnny-five.io/ is highly reccomended for additional extentions. They have created a very user friendly and simple API. I suggest looking them up here: https://github.com/rwaldron/johnny-five
 
-You will require an API key for the news, weather and you will require your user id from spotify for funtionaly to work. 
+You will require an API key for the news, weather and you will require your user id from spotify for functionality to work. 
 
 These keys are to be replaced in the api.js file under key.
 
@@ -35,7 +35,7 @@ api.nytimes.com
 
 ### Hardware
 
-For this module a Macbook through an Ardino Mega is the controlling unit. Additional modules connect through the local network and share socket sessions for sharing functionality. 
+For this module a Macbook through an Arduino Mega is the controlling unit. Additional modules connect through the local network and share socket sessions for sharing functionality. 
 
 The wiring looks like:
 ![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
@@ -56,13 +56,13 @@ This will require going through unsecure local network and allowing the micropho
 
 Some tests have been created for api.js, clock.js and spanish.js functions. You can run these tests at root with mocha
 
-for all BOOL STATEMENT's below the below words can be used: 
+for all BOOL STATEMENT's the below words can be used: 
 
 'true', 'go','on','turn on','begin','start','wake'
 return true
 
 'false','off', 'turn off', 'stop', 'halt'
-return true
+return false
 
 
 ## Commands
