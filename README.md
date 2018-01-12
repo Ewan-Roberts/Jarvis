@@ -1,5 +1,5 @@
 
-Jarvis is a home automation platform running on Node.js. It is able to track movement, respond to commands and provide useful functionality to make everything from waking up in the mornig to coming home more automated and interesting.
+Jarvis is a home automation platform running on Node.js. It is able to track movement, respond to commands and provide useful functionality to make everything from waking up in the morning to coming home more automated and interesting.
 
 
 ## Getting Started
