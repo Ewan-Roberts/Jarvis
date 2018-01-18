@@ -74,27 +74,44 @@ return false
 ```
 'what is the weather'
 ```
+[![Some functions together](https://img.youtube.com/vi/MQJssPOCcvs/0.jpg)](http://www.youtube.com/watch?v=MQJssPOCcvs)
 
 Reads out the weather for the day and displayed the weeks weather on the front end 
 
 ```
+'bedroom ' BOOL STATEMENT || 'bathroom ' BOOL STATEMENT || 'lights ' BOOL STATEMENT
+```
+[![Light control](https://img.youtube.com/vi/vsF7BOcIcHc/0.jpg)](http://www.youtube.com/watch?v=vsF7BOcIcHc)
+
+Turns on or off the bedroom lights || Turns on or off the bathroom lights || both
+
+```
 'spanish word'
 ```
+[![Spanish Word](https://img.youtube.com/vi/putezPJB2xE/0.jpg)](http://www.youtube.com/watch?v=putezPJB2xE)
+
+
 Reads out a new word from a list of a few hundred words in english then translates it into spanish and conjugates it in present tense in spanish
 
 ```
 'what is the time'
 ```
+[![Time fetch](https://img.youtube.com/vi/l_4Bto7Jdp8/0.jpg)](http://www.youtube.com/watch?v=l_4Bto7Jdp8)
+
 Reads out the current time
 
 ```
 'what is the news'
 ```
+[![News fetch](https://img.youtube.com/vi/PFzltRlG_b4/0.jpg)](http://www.youtube.com/watch?v=PFzltRlG_b4)
+
 Reads out your specified news articles
 
 ```
 'Pause' || 'play' || 'next' || 'back' || stop
 ```
+[![Player connection](https://img.youtube.com/vi/jOhSzYSmdE/0.jpg)](http://www.youtube.com/watch?v=jOhSzYSmdE)
+
 Issues Spotify with the above commands
 
 ```
@@ -102,20 +119,21 @@ Issues Spotify with the above commands
 ```
 Open an instance of google and one of the above sites
 
+[![Open Tabs](https://img.youtube.com/vi/LHDqOTiI6ZI/0.jpg)](http://www.youtube.com/watch?v=LHDqOTiI6ZI)
+
 ```
 'Facebook' || 'You Tube' 'search for' *Spat
 ```
+[![Open Tabs](https://img.youtube.com/vi/bTU4utSTPNY/0.jpg)](http://www.youtube.com/watch?v=bTU4utSTPNY)
+
 Open facebook or youtube and search for the thing you specify
 
 ```
-'play my playlist'
+'play my playlist' || 'play some music'
 ```
-Plays your Spotify playlist
+[![Open Tabs](https://img.youtube.com/vi/-WgycpPOQEc/0.jpg)](http://www.youtube.com/watch?v=-WgycpPOQEc)
 
-```
-'play some music'
-```
-Plays a song of your choosing
+Plays your Spotify playlist || Plays a song of your choosing
 
 ```
 'search for song' *Spat
@@ -125,6 +143,8 @@ Searches spotify for the song you specify and plays the best match
 ```
 'Wikipedia' *spat
 ```
+[![Open Tabs](https://img.youtube.com/vi/B4qq65lz-rE/0.jpg)](http://www.youtube.com/watch?v=B4qq65lz-rE)
+
 Searches Wikipedia and reads out the definition of the selection
 
 ```
@@ -140,6 +160,8 @@ Regulates the volume in relation to the above selections
 ```
 'screen ' BOOL STATEMENT
 ```
+[![Open Tabs](https://img.youtube.com/vi/g7o9jGtsu0o/0.jpg)](http://www.youtube.com/watch?v=g7o9jGtsu0o)
+
 Takes a BOOL statement and turns on/off your screen
 
 ```
@@ -152,20 +174,8 @@ Takes the number of minutes, creates a timer on the front end and tells the user
 ```
 Reloads current page
 
-```
-'bedroom ' BOOL STATEMENT
-```
-Turns on or off the bedroom lights
 
-```
-'bathroom ' BOOL STATEMENT
-```
-Turns on or off the bathroom lights
 
-```
-'lights ' BOOL STATEMENT
-```
-Turns on or off the both bathroom and bedroom lights
 
 
 
