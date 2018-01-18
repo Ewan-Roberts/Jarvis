@@ -64,6 +64,10 @@ return true
 'false','off', 'turn off', 'stop', 'halt'
 return false
 
+## Example
+
+[![Some functions together](https://img.youtube.com/vi/FZidrpRyMmw/0.jpg)](http://www.youtube.com/watch?v=FZidrpRyMmw)
+
 
 ## Commands
 
