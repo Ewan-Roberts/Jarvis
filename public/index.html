@@ -8,16 +8,7 @@
         <meta name="author" content="ER">
         <title>Jarvis</title>
         <meta name="viewport" content="user-scalable=no">
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/js/jquery-1.11.1.min.js"></script>
         <link rel='stylesheet' href='/css/speech.css' />
-        <script src="/js/responsivevoice.js"></script>
-        <script src="/js/commands.js"></script>
-        <script src="/js/annyang.min.js"></script>
-        <script src="/js/moment.min.js"></script>
-        <script src="/js/angular.min.js"></script>
-        <script src="/js/setUpMicrophone.js"></script>
-        <script src="/js/micro.js"></script>
 
     </head>
 
@@ -45,6 +36,8 @@
 
             <div class = "currentTime"></div>
 
+            <div class = "countdown"></div>
+
         </div>
 
         <div class= "weatherHolder" ng-controller="MainCtrl">
@@ -71,31 +64,42 @@
             
             <div class = "meter">
                 
-                <div class = "bar"></div>
+                <div class = "voiceCircle"></div>
 
             </div>
+
         </div>
         
         <div class = "voiceMatch"></div>
 
         <div class = "clock"></div>
 
-        <div id = "security"></div>
+        <!-- Vendor -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/vendor/jquery-1.11.1.min.js"></script>
+        <script src="/js/vendor/responsivevoice.js"></script>
+        <script src="/js/vendor/annyang.min.js"></script>
+        <script src="/js/vendor/moment.min.js"></script>
+        <script src="/js/vendor/angular.min.js"></script>
+
+        <!-- Custom -->
+        <script src="/js/commands.js"></script>
+        <script src="/js/setUpMicrophone.js"></script>
+        <script src="/js/micro.js"></script>
+
+        <!-- Modules -->
+        <script src="/js/app.js"></script>
+
+        <!-- Controllers -->
+        <script src="js/controllers/MainController.js"></script>
+
+        <!-- Directives -->
+        <script src="js/directives/appInfo.js"></script>
+        <script src="js/directives/news.js"></script>
+
+        <!-- Services -->
+        <script src="js/services/forecast.js"></script>
 
     </body>
-
-    <!-- Modules -->
-    <script src="/js/app.js"></script>
-
-    <!-- Controllers -->
-    <script src="js/controllers/MainController.js"></script>
-
-    <!-- Directives -->
-
-    <script src="js/directives/appInfo.js"></script>
-    <script src="js/directives/news.js"></script>
-
-    <!-- Services -->
-    <script src="js/services/forecast.js"></script>
 
 </html>

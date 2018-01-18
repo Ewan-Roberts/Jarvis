@@ -1,85 +1,41 @@
 "use strict";
 
 const childProc = require('child_process');
+
 const spotify = require('spotify-node-applescript');
-const server = require('http');
+
+const request = require('request');
+
+// put in news API Key here: 
+let newsKey = '';
+
+// put in weather API Key here:
+let weatherKey = '';
 
 module.exports = {
 
-    fetchNewsdata: func => {
+    fetchNewsdata: callback => {
 
-        // put in API key here: 
+        request('http://api.nytimes.com/svc/mostpopular/v2/mostviewed/politics/1.json?&api-key='+newsKey, (error, response,body) => {
 
-        let apiKey = ''
+            if (error) throw 'Error with the news API' + error;
 
-        const options = {
+            callback(JSON.parse(body));
 
-            host: 'api.nytimes.com',
-            
-            path: '/svc/mostpopular/v2/mostviewed/politics/1.json?&api-key=' + apiKey
-
-        };
-
-        let callback = response => {
-            
-            let str = '';
-
-            response.on('data', chunk => {
-                
-                str += chunk;
-
-            });
-
-            response.on('end', () => {
-
-                str = JSON.parse(str);
-
-                func(str);
-
-            });
-
-        };
-
-        server.request(options, callback).end();
+        });
 
     },
 
-    fetchWeaterData : func => {
+    fetchWeaterData: callback => {
 
-        // put in API key here:
+        request('http://api.openweathermap.org/data/2.5/forecast/daily?q=london&APPID='+weatherKey, (error, response,body) => {
 
-        let apiKey = ''
+            if (error) throw 'Error with the weather API' + error;
 
-        const options = {
+            callback(JSON.parse(body));
 
-            host: 'api.openweathermap.org',
-
-            path: "/data/2.5/forecast/daily?q=london&APPID=" + apiKey
-            
-        }; 
-     
-        let callback = response => {
-            
-            let str = '';
-
-            response.on('data', chunk => { 
-
-                str += chunk;
-
-            });
-
-            response.on('end', () => {
-
-                str = JSON.parse(str);
-
-                func(str);
-
-            });
-
-        };
-
-        server.request(options, callback).end();
+        });
 
     }
 
-}
+};

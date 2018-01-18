@@ -1,27 +1,22 @@
-
 "use strict";
 
 const socket = io();
 
 jQuery(document).ready($ =>{
 
-    setInterval(()=>{
-
-       $('.currentTime').html(moment().format('DD MMMM YYYY H:mm:ss')); 
-       
-    }, 1000);
-
     setUpMicrophone();
 
-    //Testing
+    // socket.emit('screen', false)
 
-    // socket.emit('news', 'Get me weather');
+    // socket.emit('weather')
 
-    // socket.emit('weather', 'Get me weather');
+    // socket.emit('spanish')
 
-    // socket.on('weather',function(res){console.log(res)});
+    // socket.emit('wikiQuery', 'term')
 
-    socket.emit('trackTime', 'get me the time');
+    // socket.emit('news');
+
+    socket.emit('trackTime');
 
     socket.on('spotifyTrackInfo', res => {
 
@@ -55,10 +50,10 @@ jQuery(document).ready($ =>{
 
         console.log(response);
 
-    });  
+    });
 
     socket.on('weather', res => {
-
+        
         $(".weatherTab").fadeIn();
 
         if(res.morning) {
@@ -79,9 +74,15 @@ jQuery(document).ready($ =>{
 
     })
 
-    $('.musicPrevious').click(() => {
+    socket.on("wikiResult", res => {
 
-        socket.emit('musicControls', 'back');
+        let removeCruft = res.replace(/[`~!@#$%^&*()_|+\-=?;:'"<>\{\}\[\]\\\/]/gi, ' ')
+
+        responsiveVoice.speak(removeCruft, "UK English Male", {rate: 0.9})
+
+    })
+
+    $('.musicPrevious').click(() => {
 
         socket.emit('musicControls', 'back');
 
@@ -97,18 +98,24 @@ jQuery(document).ready($ =>{
 
     $('.musicState').click(() =>{
 
-        if ($(this).text() === "ll"){
+        if ($('.musicState').text() === "ll"){
 
-            $(this).text(">");
-            $(this).css({"background-color": "green"});
+            $('.musicState').text(">");
+
+            $('.musicState').css({"background-color": "green"});
+
             socket.emit('musicControls', 'pause');
+
         }
 
         else{
 
-            $(this).text("ll");
-            $(this).css({"background-color": "red"});
+            $('.musicState').text("ll");
+
+            $('.musicState').css({"background-color": "red"});
+
             socket.emit('musicControls', 'play');
+
         }
         
     });
@@ -137,7 +144,10 @@ jQuery(document).ready($ =>{
         
     }
 
+    setInterval(()=>{
+
+       $('.currentTime').html(moment().format('DD MMMM YYYY H:mm:ss')); 
+       
+    }, 1000);
+
 });
-
-
-

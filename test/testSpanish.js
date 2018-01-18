@@ -4,16 +4,19 @@ const moment = require('moment');
 
 const rewire = require("rewire");
 
+let fs = require('fs')
+
 const chai = require('chai'),
+
     assert = chai.assert,
+
     expect = chai.expect,
+
     should = chai.should;
 
 let spanish = rewire('../modules/spanish.js');  
 
-fs = require('fs')
-
-let private_incrementWord = spanish.__get__("incrementWord"); // private to the spanish function, pull out for testing
+const eventHandler = require('../modules/eventHandler.js');
 
 let private_readIncrement = spanish.__get__("readIncrement");
 
@@ -21,15 +24,21 @@ let private_writeIncrement = spanish.__get__("writeIncrement");
 
 describe('Read A unique Spanish word each day', () => {
   
-  	describe('#getWord()', () => {
-    	
-    	it('Should loop though the Spanish words and return a word based on the number you provide it', () => {
+  	describe('#stripSpanishWord()', () => {
+
+        xit('Should take a spanish word object and strip it and make a readable string', () => {
+            
+            
+
+        });
+
+    	xit('Should loop though the Spanish words and return a word based on the number you provide it', () => {
       		
     	   	
 
     	});
 
-    	it('Should itterate a counter for each day the function is called on disk', () => {
+    	xit('Should itterate a counter for each day the function is called on disk', () => {
             
                 
 
@@ -37,39 +46,19 @@ describe('Read A unique Spanish word each day', () => {
 
   	});
 
-    describe('#incrementWord()', () => {
-
-        it('Should add 1 to a counter', () => {
-            
-            let number = 1;
-
-            expect(private_incrementWord(number)).to.equal(number + 1)
-
-        });
-
-        
-
-        it('Should set the counter to 0 when there are no longer any numbers in the array', () => {
-            
-            
-
-        });
-
-    });
-
     describe('#readIncrement()', () => {
 
-        it('Should provide the current counter on disk', done => {
+        xit('Should provide the current counter on disk', done => {
 
-            fs.readFile('./globalStates.json', 'utf8', function (err,data) {
-            
-                private_readIncrement(function(response) {
-                    
+            fs.readFile('./globalStates.json', 'utf8', (err,data) => {
+
+                private_readIncrement.then(res => {
+
                     let expected = JSON.parse(data)
 
-                    expect(response).to.be.an('array')
+                    expect(res).to.be.an('array')
 
-                    expect(response).to.deep.equal(expected)
+                    expect(res).to.deep.equal(expected)
 
                     done();
 
@@ -83,25 +72,21 @@ describe('Read A unique Spanish word each day', () => {
 
     describe('#writeIncrement()', () => {
 
-        it('Should write a new counter on disk', done => {
-                
-            private_readIncrement(function(response) {
+        xit('Should write a new counter on disk', () => {
 
-                let counter = response[0].counter
+            private_readIncrement.then(res=> {
 
-                private_writeIncrement(response)
+                let counter = res[0].counter
 
                 expect(private_writeIncrement(22)).to.be.false
 
-                expect(counter).to.equal(response[0].counter-1)
+                expect(counter).to.equal(res[0].counter-1)
 
-                fs.readFile('./globalStates.json', 'utf8', function (err,data) {
+                fs.readFile('./globalStates.json', 'utf8', (err,data) => {
 
                     let postChange = JSON.parse(data)
 
                     expect(postChange[0].counter).to.equal(counter+1)
-
-                    done()
 
                 })
 
@@ -109,13 +94,31 @@ describe('Read A unique Spanish word each day', () => {
 
         });
 
+        xit('Should reset if the spanish arrays end is reached', () => {
+
+            //Replace back to previous
+            let mockInput = [{"hallwayLight":"on","key":"new value","bathroomLight":"off","bedroomLight":"on","areYouHome":"yes","securityFlag":"true","keepLights":"transition","door":"open","counter":11467}]
+
+            private_writeIncrement(mockInput)
+
+            return private_readIncrement.then(obj => {
+                
+                let i = obj[0].counter
+
+                expect(i).to.equal(18)
+
+            });
+
+
+        });
+
     });
 
     describe('#saveIncrement()', () => {
 
-        it('Should save the new counter number on the hard drive', () => {
+        xit('Should save the new counter number on the hard drive', () => {
             
-            fs.readFile('./globalStates.json', 'utf8', function (err,data) {
+            fs.readFile('./globalStates.json', 'utf8', (err,data) => {
                 
                 if (err) {
 
@@ -123,17 +126,56 @@ describe('Read A unique Spanish word each day', () => {
 
                 }
 
-                // console.log(data);
-
-                var obj = JSON.parse(data)
+                let obj = JSON.parse(data)
 
             });
 
+        });
+
+    });
+
+    describe('#eventHandler on "spanish"', () => {
+
+        xit('should emit an the spanish event', done =>{
             
+            let eventFired = false
+
+            setTimeout(() => {
+
+                assert(eventFired, 'Event did not fire in 1000 ms.');
+
+                done();
+
+            }, 100); //timeout with an error in one second
+
+            eventHandler.on('spanish', () => {
+
+                eventFired = true
+
+            });
+
+            eventHandler.emit('spanish');
+
+            // do something that should trigger the event
+
+        });
+
+        xit('Should save the new counter number on the hard drive', () => {
+            
+            fs.readFile('./globalStates.json', 'utf8', (err,data) => {
+                
+                if (err) {
+
+                    return console.log(err);
+
+                }
+
+                let obj = JSON.parse(data)
+
+            });   
 
         });
 
     });
 
 });
-

@@ -1,59 +1,47 @@
 "use strict";
 
-//external libraries
-const cheerio = require('cheerio')
-const logger = require('tracer').console({format : "line: {{line}} |  {{message}} "});
-const request = require('request');
+//External libraries
 const childProc = require('child_process');
 const spotify = require('spotify-node-applescript');
 
 //internal libraries
-const app = require('./modules/speechServer.js')
-// let boardSetUp = require('./modules/boardSetUp.js')
-const computer = require('./modules/computer.js')
-const clock = require('./modules/clock.js')
-const morning = require('./modules/morning.js')
-const api = require('./modules/api.js')
+const app = require('./modules/speechServer.js');
+let boardSetUp = require('./modules/boardSetUp.js')
+const computer = require('./modules/computer.js');
+const morning = require('./modules/morning.js');
+const api = require('./modules/api.js');
 const eventHandler = require('./modules/eventHandler');
-const timer = require('./modules/timer.js')
-const piServer = require('./modules/piServer.js')
-const spanish = require('./modules/spanish.js')
+const timer = require('./modules/timer.js');
+const piServer = require('./modules/piServer.js');
+const spanish = require('./modules/spanish.js');
 const io = require('socket.io').listen(server);
-
+const musicControls = require('./modules/musicControls.js');
+const wikiQuery = require('./modules/wikiQuery.js');
+const setVolume = require('./modules/setVolume.js');
+const browserControls = require('./modules/browserControls.js');
 
 io.on('connection', socket => { 
 
-    // Testing
-    // eventHandler.emit("morning", socket)
-    // eventHandler.emit("welcomeHome", socket)
-    // boardSetUp()
-
-    socket.on("spanish", () => {
-
-        eventHandler.emit("spanish", socket)
-        
-    });
-    
-
-    console.log('sqqwqw')
-
     timer(socket)
 
-    logger.log("connection set up")
+    socket.on('error', err => {console.log(err)});
 
-    // api.on("triggerWeather", = data => {
+    socket.on('musicControls', res => {musicControls(res)})
 
-    //     socket.emit('weatherData', data);
+    socket.on('wikiQuery', res => {wikiQuery(res,socket)}) 
 
-    // }) 
-
-    socket.on('error', err => {
-
-        logger.log(err);
-
+    socket.on('setVolume', volume => {setVolume(volume)});
+    
+    socket.on('spanish', () => {
+        console.log('hit spanish'); 
+        eventHandler.emit('spanish', socket)
     });
 
-    socket.on("screen", action => {
+    socket.on('browserControls', res => {browserControls(res)})
+
+    socket.on('setSpotifyVolume', int => {spotify.setVolume(int)})
+
+    socket.on('screen', action => {
 
         if (computer.digest(action)) {
 
@@ -67,35 +55,55 @@ io.on('connection', socket => {
         
     });
 
-    socket.on("keepTheLight", action => {
+    socket.on('bedroom', cmd => {
 
-        //bedroomLight.action(true)
-
-    });
-
-    socket.on("keepTheLight", action => {
-
-        //bedroomLight.action(true)
-
-    });
-
-    socket.on('bedroom', action => {
+        if(computer.digest(cmd)) {
         
-        bedroomLight.action(computer.digest(action))
+            eventHandler.emit('bedroomLightOn');
+
+        } else {
+
+            eventHandler.emit('bedroomLightOff');
+
+        }
 
     });
 
-    socket.on('lights', action => {
+    socket.on('lights', cmd => {
 
-        bedroomLight.action(computer.digest(action))
+        if(computer.digest(cmd)) {
 
-        bathroomLight.action1(computer.digest(action))
+            eventHandler.emit('bedroomLightOn')
+        
+            eventHandler.emit('bathroomLightOn')
+
+        } else {
+
+            eventHandler.emit('bedroomLightOff')
+        
+            eventHandler.emit('bathroomLightOff')
+        }
+        
 
     });
 
-    socket.on('bathroom', action => {
+    socket.on('bathroom', cmd => {
 
-        bathroomLight.action1(computer.digest(action))
+        if(computer.digest(cmd)) {
+
+            eventHandler.emit('bathroomLightOn')
+
+        } else {
+
+            eventHandler.emit('bathroomLightOff')
+
+        }
+
+    });
+
+    socket.on('bedroomToggle', () => {
+
+        eventHandler.emit('bedroomLightToggle')
 
     });
 
@@ -107,9 +115,9 @@ io.on('connection', socket => {
 
         });
 
-    })
+    });
 
-    socket.on('weather', res => {
+    socket.on('weather', () => {
         
         api.fetchWeaterData(data => {
             
@@ -119,63 +127,7 @@ io.on('connection', socket => {
             
         });
 
-    })
-
-    socket.on('setVolume', volume => {
-        
-        logger.log(volume)
-
-        if(volume <= 2) {
-
-            childProc.exec('osascript -e "set Volume 2"');
-
-        }
-
-        if(volume > 2 <= 6) {
-
-            childProc.exec('osascript -e "set Volume 6"');
-
-        }
-
-        if(volume > 6) {
-
-            childProc.exec('osascript -e "set Volume 10"');
-
-        }    
-
     });
-
-    socket.on('browserControls', res => {
-
-        switch(res) {
-
-            case 'Spotify':
-
-                childProc.exec('open /applications/Spotify.app');
-
-            break;
-
-            case 'Jarvis':
-
-                childProc.exec('open -a "Google Chrome" --new --args https://localhost:3001/microphone');
-
-            break;
-
-            case 'Facebook':
-
-                childProc.exec('open -a "Google Chrome" --new --args --ingognito https://www.facebook.com/ewanr');
-
-            break;
-
-            case 'YouTube':
-
-                childProc.exec('open -a "Google Chrome" --new --args --ingognito https://www.youtube.com/feed/subscriptions');
-
-            break;
-
-        }
-
-    })
 
     socket.on('applicationSearch', res => {
 
@@ -204,17 +156,13 @@ io.on('connection', socket => {
 
     })
 
-    socket.on('setSpotifyVolume', int => {
-
-        spotify.setVolume(int)
-
-    })
-
     socket.on('playTrack', res => {
 
         spotify.playTrack('spotify:track:' + res, () => {
             
             spotify.getTrack((err, track) => {
+                
+                if(error) throw 'error in playing track ' + error;
 
                 socket.emit('trackInfo', track)
 
@@ -224,181 +172,32 @@ io.on('connection', socket => {
 
     })
 
-    socket.on('musicControls', res => { 
-
-        switch(res) {
-            
-            case 'next':
-                logger.log('next please')
-                spotify.next()
-                break;
-            case 'play':
-                logger.log('play please')
-                spotify.play()
-                break;
-            case 'pause':
-                logger.log('Pause please')
-                spotify.pause()
-                break;
-            case 'back':
-                logger.log('next please')
-                spotify.previous()
-                break;
-            case 'up':
-                logger.log('up please')
-                childProc.exec('osascript -e "set Volume 6"');
-                spotify.volumeUp()
-                break;
-            case 'down':
-                logger.log('volume Down please')
-                childProc.exec('osascript -e "set Volume 6"');
-                spotify.volumeDown()
-                break;
-            case 'full':
-                logger.log('volume full please')
-                childProc.exec('osascript -e "set Volume 10"');
-                spotify.setVolume(100);
-                break;
-            case 'half':
-                logger.log('volume half please')
-                childProc.exec('osascript -e "set Volume 6"');
-                spotify.setVolume(50);
-                break;
-    
-        }
-
-    })
-
-    socket.on('wikiQuery', res => {
-
-        let url = 'https://en.wikipedia.org/wiki/' + res;
-
-        request(url, (error, response, html) => {
-            
-            logger.log(error)
-
-            if(!error){
-                
-                let $ = cheerio.load(html);            
-
-                if($('.mbox-small').length > 0) {
-
-                        $('.mbox-small').remove()
-                }
-
-                if($('.vertical-navbox').length > 0) {
-
-                    $('.vertical-navbox').remove()
-                }
-                
-                //nothing returned
-
-                if($('#mw-content-text').find('p').first().children().text().indexOf("this message may") > -1) {
-
-                    logger.log('No result for what you search for')
-
-                }
-
-                //SEARCH PAGE: if the element doesnt exists this is a search page
-
-                if($('#mw-content-text').find('p').first().text().indexOf("may refer") > -1) {
-
-                    logger.log('this is a search page')
-                
-                    if($('#toc').length > 0) {
-
-                        $('#toc').remove()
-                    }
-
-                    if($('.mbox-small').length > 0) {
-
-                        $('.mbox-small').remove()
-                    }   
-
-                    let firstInList = $('#mw-content-text').find("li").find("a").first().attr('href')
-
-                    let url2 = 'https://en.wikipedia.org' + firstInList;
-
-                    request(url2, (error, response, html) => {
-                        let $ = cheerio.load(html);
-                        
-                        if(!error){
-
-                            let context = $("p", "#mw-content-text").first().text();
-
-                            socket.emit('wikiResult', context)
-
-                        }
-
-                    })
-
-                }
-
-                else {
-
-                    let context = $("p", "#mw-content-text").first().text();
-
-                    socket.emit('wikiResult', context)
-
-                }
-
-            }
-
-        })
-
-    })
-
 });
- 
 
+eventHandler.on('checkStatus', callback => {
+    
+    let sessionData = io.nsps["/"].connected;
+    
+    let bool = Object.keys(sessionData).length>0
 
+    callback(bool);
 
-    //  socket.on('travel', res => {
-        
-    //     logger.log(res)
+})
 
-    //     logger.log('starting weather request')
+setTimeout(() => {
 
-    //     var options = {
+    eventHandler.emit('checkStatus', bool => {
 
-    //         host: 'api.tfl.gov.uk',
-
-    //         path: '/Place/BikePoints_489'
-    //         // svc/mostpopular/v2/mostviewed/arts/30.xml?offset=40
-    //     };
-
-    //     callback = response => {
+        if(!bool){
             
-    //         logger.log(response)
+            childProc.exec('open -a "Google Chrome" --new --args https://localhost:3002 --ignore-certificate-errors')    
+        
+        } else {
 
-    //         var str = '';
+            console.log('Session already exists')
 
-    //         //another chunk of data has been recieved, so append it to `str`
-    //         response.on('data', chunk => {
+        }
+        
+    })
 
-    //             str += chunk;
-
-    //         });
-
-    //         //the whole response has been recieved, so we just print it out here
-    //         response.on('end', () => {
-                
-    //             str = JSON.parse(str)
-                
-    //             socket.emit('travelData', str);
-
-    //         });
-
-    //     }
-
-    //     http2.request(options, callback).end();
-
-    // })
-
-
-
-
-
-
-
-
+}, 2000);

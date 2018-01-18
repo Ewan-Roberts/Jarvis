@@ -3,66 +3,61 @@
 const moment = require('moment');
 
 const chai = require('chai'),
+
     assert = chai.assert,
+
     expect = chai.expect,
+
     should = chai.should;
 
 const api = require('../modules/api.js');
 
 describe('API calls', function() {
   
-  describe('#fetchNewsData()', function() {
+    describe('#fetchNewsData()', function() {
       
-    xit('Return an object with 20 stories from the new york times POLITICS section', function(done) {
+        xit('Return an object with 20 stories from the new york times POLITICS section', function (done) {
 
-            api.fetchNewsdata(function(res) {
+            api.fetchNewsdata(res => {
 
-                    assert(res.should.be.an('object'))
+                res.should.be.an('object')
 
-                    expect(res.status).to.equal('OK')
+                expect(res.status).to.equal('OK')
 
-                    expect(res.results.length).to.equal(20)
+                expect(res.results.length).to.equal(20)
 
-                    done();
+                done();
 
-                }, 
-
-                function(err) {
-
-                    if (err) throw err;
-
-                    done();
-
-                });
-                
             })
-        
-    });
+            
+        });
 
-  describe('#fetchWeaterData()', function() {
+    })
+
+    describe('#fetchWeaterData()', function() {
       
-    xit('Return an object with the weather data of London', function(done) {
+        xit('Return an object with the weather data of London', function (done) {
 
             api.fetchWeaterData(function(res) {
 
-                    assert(res.should.be.an('object'))
+                assert(res.should.be.an('object'))
 
-                    expect(res.city.name).to.equal('London')
+                expect(res.city.name).to.equal('London')
 
-                    done();
+                done();;
 
-                }, 
+            }, 
 
-                function(err) {
+            function (err) {
 
-                    if (err) throw err;
+                if (err) throw err;
 
-                    done();
+                done();
 
-                });
-                
-            })
-        
+            });
+                    
+        })
+            
     });
 
 });

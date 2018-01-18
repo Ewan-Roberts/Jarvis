@@ -4,8 +4,8 @@ html {
 
 }
 
-
 .meter {
+
   height: 200px;
   width: 200px;
   position: relative;
@@ -13,10 +13,26 @@ html {
   border-radius: 50%;
   margin-top: 5%;
   margin-left: 43%;
+
 }
 
+.countdown {
 
-.bar {
+  display: none;
+  margin-left: 43%;
+  height: 40px;
+  width: 200px;
+  background-color: grey;
+  text-align: center;
+  color: white;
+  font-size: 26px;
+  line-height: 40px;
+  text-justify: inter-word;
+
+}
+
+.voiceCircle {
+
   border-radius: 50%;
   width: 1%;
   height: 1%;
@@ -27,11 +43,13 @@ html {
   margin-left: 50%;
   background: blue;
   -webkit-transform:scale(2, 2);
+
 }
 
 body {
 
   margin: 0px;
+  
 }
 
 .voiceMatch {

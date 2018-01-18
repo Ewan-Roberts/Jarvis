@@ -1,31 +1,29 @@
 
+'use strict';
 
 const eventHandler = require('./eventHandler');
 
 const fs = require('fs');
 
+// Loads the JSON file on disk
 const spanishWords = require("../spanishWords.json");
 
-const incrementWord = int => {
+//Reads the current word the user is up to in the array
+const readIncrement = new Promise((resolve,reject) => {
 
-	return int+1;
-
-}
-
-const readIncrement = new Promise(resolve => {
-
-	fs.readFile('./globalStates.json', 'utf8', function (err,data) {
+	fs.readFile('./globalStates.json', 'utf8', (err,data) => {
                 
         if (err) return console.log(err);
 
         let obj = JSON.parse(data)
-   
+
 		resolve(obj)
 
     });
 
 })
 
+//Increments the spanish word and resets if the end of the array is hit
 const writeIncrement = obj => {
 
 	if (typeof obj != 'object') return false
@@ -42,13 +40,14 @@ const writeIncrement = obj => {
 
 }
 
+// Stip out the object and construct a string that can be sent to the front end as the word of the day
 const stripSpanishWords = obj => {
 
 	let schema = {
 		english : "",
 		spanish : ""
 	}
-
+	
 	let infinativeSpanish = " la palabra en Infinativo es: " + obj.infinitive + ", otro vez,.  " + obj.infinitive ;
 	
 	let tense = "., Ahora, estamos aprendiendo el tense,. " + obj.tense;
@@ -63,11 +62,17 @@ const stripSpanishWords = obj => {
 
 };
 
-const getSpanishWord = new Promise(resolve => {
-	
+// Strips out the word and resolve to it so it can be passed 
+const getSpanishWord = new Promise((resolve,reject) => {
+	console.log('hit spanish 3')
+
 	readIncrement.then(obj => {
 
 		let i = obj[0].counter
+
+		if(i >= 11466) {
+			i = 0;
+		}
 
 		resolve(stripSpanishWords(spanishWords[i]))
 
@@ -75,16 +80,17 @@ const getSpanishWord = new Promise(resolve => {
 
 	})
 
-})
+});
 
+
+
+// Bind the event globally and send it to the front end
 eventHandler.on("spanish", socket => {
 
 	getSpanishWord.then(str => {
-
+		
 		socket.emit('speechFromBackEndSpanish', str)
 
 	})
 
-})
-
-
+});

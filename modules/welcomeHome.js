@@ -5,23 +5,20 @@ const childProc = require('child_process');
 
 let eventHandler = require('./eventHandler');
 
-let userHome = true 
+let userHome = true;
 
-//Put user ID here
-
+//Put Spotify user ID here
 let spotifyUser = ''
 
-//Put playlist link here
-
+//Put Spotify user playlist link here
 let spotifyPlaylist = ''
 
+// When the user comes home execute the below
 eventHandler.on("welcomeHome", socket => {
 
     if(!userHome) {
 
         spotify.setVolume(100);
-
-        spotify.pause()
            
         setTimeout(() => {
 
@@ -29,21 +26,22 @@ eventHandler.on("welcomeHome", socket => {
 
         }, 3000);
         
-        eventHandler.emit("bedroomLightOn")
+        eventHandler.emit("bedroomLightOn");
 
-        socket.emit('speechFromBackEnd', '  Welcome home')
+        socket.emit('speechFromBackEnd', '  Welcome home Ewan');
 
-        userHome = true
+        userHome = true;
 
     }
 
-})
+});
 
+// Each day reset the time so when a user comes home they are welcomed 
 module.exports.reset = hour => {
 
     if (hour === "17:00") {
 
-        userHome = false
+        userHome = false;
 
     }
 

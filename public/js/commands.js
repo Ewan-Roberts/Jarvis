@@ -1,88 +1,175 @@
-console.log('commands loaded')
+"use strict";
+
+let timer;
+
+function Timer (callback, delay) {
+
+    let timerId, start, remaining = delay;
+
+    this.pause = () => {
+        
+        clearTimeout(timerId);
+        
+        remaining -= new Date() - start;
+    
+    };
+
+    this.resume = () => {
+
+        start = new Date();
+
+        clearTimeout(timerId);
+
+        timerId = setInterval(callback, remaining);
+
+    };
+
+    this.reset = () => {
+
+        start = new Date();
+
+        clearTimeout(timerId);
+
+        remaining = 0;
+
+    };
+
+    this.resume();
+
+}
 
 let commands = {
 
-    'let me sleep': function() { 
+    'timer for *mins': mins => { 
+        
+        let milli = mins * 60000
 
-        var action = true
+        let seconds = mins*60
 
-        socket.emit('keepTheLight', action)
+        $('.countdown').slideDown()
+
+        $('.countdown').text(seconds + " seconds")
+
+        responsiveVoice.speak("Timer started for " + mins + " minutes", "UK English Male", {rate: 0.9});
+
+        timer = new Timer(()=> {
+
+            $('.countdown').text(seconds + " seconds")
+
+            seconds -= 1;
+
+            if(seconds===0){
+
+                $('.countdown').fadeOut()
+
+                responsiveVoice.speak("Timer finished", "UK English Male",{rate: 0.9});
+
+                clearInterval(timer)
+
+            }
+
+        }, 1000);
 
     },
 
-    'keep the lights *action': function(action) { 
+    'timer reset': () => { 
 
-        console.log(action)
+        $('.countdown').fadeOut()
 
-        socket.emit('keepTheLight', action)
+        clearInterval(timer)
+
+        responsiveVoice.speak("Timer reset", "UK English Male", {rate: 0.9});
+
+        timer.reset()
 
     },
 
-    'open everything': function(action) { 
+    'timer stop': () => { 
+
+        $('.countdown').fadeOut()
+
+        responsiveVoice.speak("Timer stopped", "UK English Male", {rate: 0.9});
+
+        timer.pause()
+
+    },
+
+    'timer resume': () => { 
+
+        $('.countdown').fadeIn()
+
+        responsiveVoice.speak("Timer resummed", "UK English Male", {rate: 0.9});
+
+        timer.resume()
+
+    },
+
+    'screen *action': action => { 
 
         socket.emit('screen', action)
 
     },
 
-    'screen *action': function(action) { 
-
-        socket.emit('screen', action)
-
-    },
-
-    'reload': function() {
+    'reload': () => {
 
         window.location.reload()
 
     },
 
-    'refresh': function() {
+    'refresh': () => {
 
         window.location.reload()
 
     },
 
-    'bedroom *action': function(action) { 
+    'bedroom *action': action => { 
         
-        socket.emit('bedroom', action)
-
+        socket.emit('bedroom', action)    
+        
     },
 
-    'bathroom *action': function(action) { 
-        
+    'toggle': () => { 
+
+        socket.emit('bedroomToggle')
+    },
+
+    'bathroom *action': action => { 
+    
         socket.emit('bathroom', action)
 
-        console.log('hit hit ')
-
     },
 
-    'lights *action': function(action) { 
+    'lights *action': action => { 
         
         socket.emit('lights', action)
 
-        console.log('hit hit ')
-
     },
 
-    'what is the weather': function() { 
+    'what is the weather': () => { 
         
         socket.emit('weather')
 
     },
 
-    'spanish word': function() { 
+    'where does isabella live': () => { 
+        
+        responsiveVoice.speak("Nw1 6dn", "UK English Male",{rate: 0.9});
+
+    },
+
+    'spanish word': () => { 
         
         socket.emit('spanish')
 
     },
 
-    'what is the time' : function () {
+    'what is the time' : () => {
 
         responsiveVoice.speak("Today is; " + moment().format('dddd') + ", and the time is. " + moment().format('HH:mm'), "UK English Male",{rate: 0.9});
 
     },
 
-    'stop (stop)' : function () {
+    'stop (stop)' : () => {
 
         socket.emit('musicControls', 'pause')   
 
@@ -90,17 +177,18 @@ let commands = {
         
     },
 
-    'open *application' : function (application) {
+    'open *application' : application => {
 
         socket.emit('browserControls', application)
         
     },
 
-    '*application search for *video' : function (application,video) {
+    '*application search for *video' : (application,video) => {
 
-        res = {
+        let res = {
 
             vessel: application,
+
             search: video
 
         }
@@ -109,27 +197,22 @@ let commands = {
         
     },
 
-    'play *user playlist' : function (user) {
+    'play *user playlist' : user => {
 
-        socket.emit('playUserPlaylist', 'go')
+        socket.emit('playUserPlaylist')
 
     },
 
-    'play some (music)' : function () {
+    'play some (music)' : () => {
 
         socket.emit('playTrack', '2jplimH0b7Abf5LQSPx27A')
-
-        socket.on('trackInfo', function(res) {
-
-            console.log(res)
-
-        }) 
         
     },
 
-    'search for song *name': function(name) {
+    'search for song *name': name => {
 
-        //put track and song and artist search in
+        //TODO : all calls should be on the BE
+
         $.ajax({
 
             url: 'https://api.spotify.com/v1/search',
@@ -139,22 +222,17 @@ let commands = {
                 type: 'track'
             },
 
-            success: function (response) {
+            success: response => {
 
                 socket.emit('playTrack', response.tracks.items[0].id) 
 
-                socket.on('trackInfo', function(res) {
-
-                    console.log(res)
-
-                })
-
             }
+
         });
 
     },
 
-    'search for artist *name': function(name) {
+    'search for artist *name': name => {
  
         $('.artist').remove()
 
@@ -166,23 +244,17 @@ let commands = {
                     
                 if(index == (1||"one"||"1"||"first")) {
 
-                    console.log($('.overlay')[0].id)
-
                     getArtistTopTracks($('.overlay')[0].id)
 
                 }
 
                 else if (index == (2||"two"||"2"||"second")) {
 
-                    console.log($('.overlay')[1].id)
-
                     getArtistTopTracks($('.overlay')[1].id)
                     
                 }
 
                 else if (index == (3||"three"||"3"||"third")) {
-
-                    console.log($('.overlay')[2].id)
 
                     getArtistTopTracks($('.overlay')[2].id)
                     
@@ -193,126 +265,100 @@ let commands = {
 
     },     
 
-    'Wikipedia *term': function(term) {
+    'Wikipedia *term': term => {
 
         socket.emit('wikiQuery', term)
 
-        socket.on("wikiResult", res => {
-
-            let removeCruft = res.replace(/[`~!@#$%^&*()_|+\-=?;:'"<>\{\}\[\]\\\/]/gi, ' ')
-
-            responsiveVoice.speak(removeCruft, "UK English Male", {rate: 0.9})
-
-        })
-
     },
 
-    'clear': function() { 
+    'clear': () => { 
 
         $('.leftTab').fadeOut('slow') 
         $('.weatherTab').fadeOut('slow')
 
     },
 
-    'volume up (up)': function() {
+    'volume up (up)': () => {
 
         socket.emit('musicControls', 'up')
         socket.on('setVolume', 6)
 
     },
 
-    'volume down (down)': function() {
+    'volume down (down)': () => {
 
         socket.emit('musicControls', 'down')   
         socket.on('setVolume', 6)             
 
     },
 
-    'volume full (full)': function() {
+    'volume full (full)': () => {
 
         socket.emit('musicControls', 'full') 
         socket.on('setVolume', 10)                
 
     },
 
-    'volume half (half)': function() {
+    'volume half (half)': () => {
 
         socket.emit('musicControls', 'half') 
         socket.on('setVolume', 6)               
 
     },
 
-    'pause (pause)': function() {
+    'pause (pause)': () => {
 
         socket.emit('musicControls', 'pause')                
 
     },
 
 
-    'cheese (cheese)': function() {
+    'cheese (cheese)': () => {
 
         socket.emit('musicControls', 'pause')                
 
     },    
 
-    'horse (horse)': function() {
+    'horse (horse)': () => {
 
         socket.emit('musicControls', 'pause')                
 
     },
 
-    'play (play)': function() {
+    'play (play)': () => {
 
         socket.emit('musicControls', 'play')
 
     },
 
-    'next (next)': function() {
+    'next (next)': () => {
 
         socket.emit('musicControls', 'next')
 
     },   
 
-    'back (back)': function() {
+    'back (back)': () => {
 
         socket.emit('musicControls', 'back')
         socket.emit('musicControls', 'back')
 
     },
 
-    'thanks Jarvis': function() {
+    'thanks Jarvis': () => {
 
-        responsiveVoice.speak('you are welcome you win', "UK English Male", {rate: 0.9})
-
-    },
-
-    'hi Jarvis': function() {
-
-        responsiveVoice.speak('Hi youwan how are you today?', "UK English Male", {rate: 0.9})
+        responsiveVoice.speak('you are very welcome', "UK English Male", {rate: 0.9})
 
     },
 
-    'what is the news' : function () {
+    'hi Jarvis': () => {
 
-        socket.emit('news', 'Get me the news');
-
-    },
-    
-    'shutdown everything': function () {
-
-        socket.emit('shutDown', 'go')
+        responsiveVoice.speak('Hi there how are you today?', "UK English Male", {rate: 0.9})
 
     },
 
-    'kill everything': function () {
+    'what is the news' : () => {
 
-        socket.emit('shutDown', 'go')
-
-    },
-
-    'resurrection': function () {
-
-        socket.emit('turnOn', 'go')
+        socket.emit('news');
 
     }
 

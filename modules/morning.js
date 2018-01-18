@@ -1,22 +1,40 @@
 "use strict";
 
 const spotify = require('spotify-node-applescript');
-const childProc = require('child_process');
-const api = require('./api.js');
-let eventHandler = require('./eventHandler.js');
 
+const childProc = require('child_process');
+
+const api = require('./api.js');
+
+let eventHandler = require('./eventHandler.js');
 
 eventHandler.on("morning", socket => {
 
     spotify.setVolume(60);
 
-    childProc.exec('osascript -e "set Volume 6"');
+    eventHandler.emit('checkStatus', bool => {
+
+        if(!bool){
+            
+            childProc.exec('open -a "Google Chrome" --new --args https://localhost:3002 --ignore-certificate-errors')    
+        
+        } else {
+
+            console.log('Session already exists')
+
+        }
+        
+    })
+
+    childProc.exec('osascript -e "set Volume 4"');
 
     spotify.playTrack('spotify:track:0eHymWFSXpFrD2FqFfvlZw')
 
     setTimeout(() => {
         
-        eventHandler.emit("lightsOn")
+        eventHandler.emit('bedroomLightOn')
+        
+        eventHandler.emit('bathroomLightOn')
         
         api.fetchWeaterData(data => {
             
@@ -39,12 +57,6 @@ eventHandler.on("morning", socket => {
     }, 50000);
 
     setTimeout(() => {
-      
-        eventHandler.emit("lightsOn");
-        
-    }, 60000);
-
-    setTimeout(() => {
         
         spotify.pause();
 
@@ -57,10 +69,12 @@ eventHandler.on("morning", socket => {
     }, 70000);
 
     setTimeout(() => {
-
-        socket.emit("spanish");
         
-    }, 100000);
+        spotify.pause();
+
+        eventHandler.emit("spanish", socket);
+        
+    }, 120000);
 
     setTimeout(() => {
 

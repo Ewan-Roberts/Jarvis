@@ -1,100 +1,25 @@
+"use strict";
+
 const five = require("johnny-five");
 
 const board = new five.Board();
 
-const computer = require('./computer.js')
+board.on("ready", () => {
 
-let eventHandler = require('./eventHandler.js');
+    //Set up the modules on the ardino board and sets up events.on
 
-console.log('board setting up')
-//TODO do i need this? Why am i exporting? 
-module.exports = () => {
+    const bedroomLight = require('./bedroomLight.js')
 
-	board.on("ready", () => {
+    const bathroomLight = require('./bathroomLight.js')
 
-	    /// Johnny-five modules
+    const bedroomMotion = require('./bedroomMotion.js')
 
-	    const bedroomLight = require('./bedroomLight.js')
+    const hallwayMotion = require('./hallwayMotion.js')
+    
+})
 
-	    const bathroomLight = require('./bathroomLight.js')
-
-	    const bedroomMotion = require('./bedroomMotion.js')
-
-	    const hallwayMotion = require('./hallwayMotion.js')
-
-	    eventHandler.on("lightsOff", () => {
-
-	    	console.log('lights off')
-
-	    	if(bedroomLight.isLightOn()){
-	    	 	
-	    	 	bedroomLight.action(false)
-
-            	bathroomLight.action1(false)
-
-            	computer.screenSleep()
-
-	    	}
-
-	    })
-
-	   	eventHandler.on("lightsOn", () => {
-	    	
-	    	console.log('lights on')
-
-	    	if(!bedroomLight.isLightOn()){
-	    	 	
-	    	 	bedroomLight.action(true)
-
-            	bathroomLight.action1(true)
-
-            	computer.screenWake();
-
-	    	}
-
-	    })
-
-	    eventHandler.on("bedroomLightOn", () => {
-
-	    	if(!bedroomLight.isLightOn()){
-	    	 	
-	    	 	bedroomLight.action(true)
-
-	    	}
-
-	    })
-
-	    eventHandler.on("bedroomLightOff", () => {
-
-	    	if(bedroomLight.isLightOn()){
-	    	 	
-	    	 	bedroomLight.action(false)
-
-	    	}
-
-	    })
-
-	    eventHandler.on("bathroomLightOn", () => {
-
-	    	if(!bathroomLight.isLightOn()){
-	    	 	
-	    	 	bathroomLight.action1(true)
-
-	    	}
-
-	    })
-
-	    eventHandler.on("bathroomLightOff", () => {
-
-	    	if(bathroomLight.isLightOn()){
-	    	 	
-	    	 	bathroomLight.action1(false)
-
-	    	}
-
-	    })
-	    
-	})
-
-}
-
+board.on("error", function(err) {
+    
+    console.log("There was an error" + err);   
+                                   
+}); 
