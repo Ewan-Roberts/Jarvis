@@ -37,8 +37,13 @@ api.nytimes.com
 
 For this module a Macbook through an Arduino Mega is the controlling unit. Additional modules connect through the local network and share socket sessions for sharing functionality. 
 
-The wiring looks like:
+The wiring for the project is below like:
 ![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
+
+For the extention the wiring is below: 
+![Alt text](https://raw.githubusercontent.com/vanguard12/Jarvis-RaspberryPiExtention/master/images/piServer.jpg?raw=true "Fritzing version of hardware set up")
+
+More details can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
 
 ### Installing
 
