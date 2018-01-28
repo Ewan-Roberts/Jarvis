@@ -21,7 +21,7 @@ Functionality for Spotify is using applescript and therefore this functonality w
 
 You will require an Arduino and servos set up on any light switches you would like to automate, more details of which can be found in the hardware section below. 
 
-This project is designed to be modular with aditional functionality being shared through sockets. Please refer to piServer for controls of the lights, more automated lights and the opening and closing of doors.
+This project is designed to be modular with aditional functionality being shared through sockets. Please refer to https://github.com/vanguard12/Jarvis-RaspberryPiExtention for controls of the lights, more automated lights and the opening and closing of doors.
 
 A good understanding of http://johnny-five.io/ is highly reccomended for additional extentions. They have created a very user friendly and simple API. I suggest looking them up here: https://github.com/rwaldron/johnny-five
 
