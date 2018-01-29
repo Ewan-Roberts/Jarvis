@@ -1,7 +1,7 @@
 
 Jarvis is a voice and motion activated home automation platform. It provides developers with everything from automating light switching and door opening, to welcoming users home with the news of the day and their favourite songs on Spotify.
 
-Additionally, Jarvis is built in a modular fashion, allowing additional functionalty to constantly be added as long as data can be transmitted through shared sockets.
+Additionally, Jarvis is built in a modular fashion, allowing additional functionality to constantly be added as long as data can be transmitted through shared sockets.
 
 ## Getting Started
 
@@ -18,7 +18,7 @@ npm install
 
 - Node.js: You will require the latest version of Node.js which can download here: https://nodejs.org/en/download/
 
-- API Keys: You will require an API key for the news, weather and you will require your user id from spotify for functionality to work:
+- API Keys: You will require an API key for the news, weather and you will require your user id from Spotify for functionality to work:
 
 These keys are to be replaced in the userInformation.js file under modules. Keys can be created below for free:
 - api.openweathermap.org
@@ -30,7 +30,7 @@ These keys are to be replaced in the userInformation.js file under modules. Keys
 
 - Modules: For a full feature list please refer to https://github.com/vanguard12/Jarvis-RaspberryPiExtention for controls of additional lights, open and closing of doors and buttons to control functionality.
 
-- Johnny-Five: A good understanding of http://johnny-five.io/ is highly reccomended for additional extentions. They have created a very user friendly and simple API. API documentation here: https://github.com/rwaldron/johnny-five
+- Johnny-Five: A good understanding of http://johnny-five.io/ is highly recommended for additional extensions. They have created a very user friendly and simple API. API documentation here: https://github.com/rwaldron/johnny-five
 
 
 ### Ardunio Set Up (excerpt from the very helpful http://node-ardx.org/)
@@ -57,10 +57,10 @@ The layout of the hardware wiring for Jarvis and an additional module can be fou
 The wiring for the project is below like:
 ![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
 
-For the extention the wiring is below: 
+For the extension the wiring is below: 
 ![Alt text](https://raw.githubusercontent.com/vanguard12/Jarvis-RaspberryPiExtention/master/images/piServer.jpg?raw=true "Fritzing version of hardware set up")
 
-More details of the extention can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
+More details of the extension can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
 
 
 ### Installing
@@ -81,7 +81,7 @@ Tests have not been created for each function, however most complicated function
 
 ## BOOL/Spat Management
 
-In Jarvis *spats* are used that effectively take an input and pass the string to the back end to be interpretted. If these spats are to indicated an on or off state they are digested as layed out below:
+In Jarvis *spats* are used that effectively take an input and pass the string to the back end to be interpreted. If these spats are to indicated an on or off state they are digested as shown out below:
 
 for all BOOL STATEMENT's the below words can be used: 
 
@@ -175,7 +175,7 @@ Plays your Spotify playlist || Plays a song of your choosing
 ```
 'search for song' *Spat
 ```
-Searches spotify for the song you specify and plays the best match
+Searches Spotify for the song you specify and plays the best match
 
 ```
 'Wikipedia' *spat
