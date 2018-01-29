@@ -90,20 +90,32 @@ In Jarvis *spats* are used. Effectively they represent an input and pass the str
 BOOL statements are linked to the below words: 
 
 'true'
+
 'go'
+
 'on'
+
 'turn on'
+
 'begin'
+
 'start'
+
 'wake'
-return true
+
+**return true**
 
 'false'
+
 'off'
+
 'turn off'
+
 'stop'
+
 'halt'
-return false
+
+**return false**
 
 For example: "bedroom {on}", "bedroom {turn on}", "bedroom {start}" would all turn the light on.
 
