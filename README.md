@@ -150,7 +150,7 @@ Reads out your specified news articles from the New York Times
 ```
 'Pause' || 'play' || 'next' || 'back' || stop
 ```
-[![Player connection](https://img.youtube.com/vi/jOhSzYSmdE/0.jpg)](http://www.youtube.com/watch?v=jOhSzYSmdE)
+[![Player connection](https://img.youtube.com/vi/jOhSzYSmdE/0.jpg)](https://www.youtube.com/watch?v=-jOhSzYSmdE)
 
 Issues Spotify with the above commands
 
