@@ -1,91 +1,42 @@
 "use strict";
 
-const spotify = require('spotify-node-applescript');
+const spotify = require('spotify-node-applescript'),
+    fetchWeatherData = require('./fetchWeatherData.js'),
+    event = require('./event.js');
 
-const childProc = require('child_process');
+event.on("morning", () => {
 
-const api = require('./api.js');
+    event.emit('checkStatus');
 
-let eventHandler = require('./eventHandler.js');
+    event.emit('musicControls','half');
 
-eventHandler.on("morning", socket => {
-
-    spotify.setVolume(60);
-
-    eventHandler.emit('checkStatus', bool => {
-
-        if(!bool){
-            
-            childProc.exec('open -a "Google Chrome" --new --args https://localhost:3002 --ignore-certificate-errors')    
-        
-        } else {
-
-            console.log('Session already exists')
-
-        }
-        
-    })
-
-    childProc.exec('osascript -e "set Volume 4"');
-
-    spotify.playTrack('spotify:track:0eHymWFSXpFrD2FqFfvlZw')
+    spotify.playTrack('spotify:track:0eHymWFSXpFrD2FqFfvlZw');
 
     setTimeout(() => {
         
-        eventHandler.emit('bedroomLightOn')
-        
-        eventHandler.emit('bathroomLightOn')
-        
-        api.fetchWeaterData(data => {
+        event.emit('bedroomLight',true);
+        event.emit('bathroomLight',true);
+        event.emit('corridorLight',true);
+
+        spotify.getState((err, obj) => {
             
-            data.morning = true
+            //If the user has paused the music, stop the process
+            if(obj.state === "playing") {
+                
+                fetchWeatherData(data => {
+                       
+                    data.morning = true;
+        
+                    event.emit('weather', data);
+
+                });
+
+                event.emit('musicControls','pause');
             
-            socket.emit('weather', data)
+            }
 
         });
 
-        spotify.pause();
-
-    }, 40000);
-
-    setTimeout(() => {
-
-        spotify.play();
-        
-        spotify.setVolume(70);   
-
-    }, 50000);
-
-    setTimeout(() => {
-        
-        spotify.pause();
-
-        api.fetchNewsdata(data => {
-
-            socket.emit('news', data)
-
-        });
-        
-    }, 70000);
-
-    setTimeout(() => {
-        
-        spotify.pause();
-
-        eventHandler.emit("spanish", socket);
-        
-    }, 120000);
-
-    setTimeout(() => {
-
-        spotify.play();
-        
-    }, 180000);
-
-    setTimeout(() => {
-
-        spotify.pause();
-        
-    }, 280000);
+    }, 19000);
 
 })

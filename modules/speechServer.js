@@ -1,33 +1,27 @@
 
 
-const favicon = require('serve-favicon');
-const app = require('express')();
-
-// Module dependencies
-const express = require('express');
-const http = require('https');
-const path = require('path');
-const fs = require("fs");
-const eventHandler = require('./eventHandler');
+const app = require('express')(),
+	express = require('express'),
+	https = require('https'),
+	path = require('path'),
+	fs = require("fs"),
+	event = require('./event');
 
 app.use(express.bodyParser());
-app.set('port', process.env.PORT || 3002);
+app.set('port', process.env.PORT || 3003);
 app.engine('html', require('ejs').renderFile);
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
+app.use(express.cookieParser('A secret'));
 app.use(express.session());
 app.use(app.router);
 app.use(express.static('public'))
 
-// Development only
-// app.use(favicon(__dirname + '/public/images/favicon.ico'));
-
 app.get('/', function (req, res) {
 
-  res.sendfile('index.html', {'root': '../speech/public'});
+  	res.sendfile('index.html', {'root': '../speech/public'});
  
 });
 
@@ -42,10 +36,8 @@ const options = {
 };
 
 //Create a global server to be accessed across the application
-server = http.createServer(options, app).listen(app.get('port'), () => {
+server = https.createServer(options, app).listen(app.get('port'), () => {
  
   console.log('Server listening on port ' + app.get('port'));
 
-});
-
-server.listen(3012);
+})

@@ -1,8 +1,9 @@
 "use strict";
 
-const childProc = require('child_process');
+const childProc = require('child_process'),
+    event = require('./event');
 
-module.exports = res => {
+event.on('browserControls', res => {
 
     switch (res) {
 
@@ -32,4 +33,4 @@ module.exports = res => {
 
     }
     
-}
+})

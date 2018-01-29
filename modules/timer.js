@@ -1,85 +1,77 @@
 "use strict";
 
-const moment = require('moment');
-const welcomeHome = require('./welcomeHome.js')
-let eventHandler = require('./eventHandler.js');
-const spotify = require('spotify-node-applescript');
-let timeSinceMovement = Date.now();
+const moment = require('moment'),
+    event = require('./event.js');
 
 // Timer for when the light should be turned off again
-const checkTimeSinceLastMovement = currentTime => {
+let timeSinceMovement = Date.now();
 
-    return currentTime > (timeSinceMovement + 600000)
+//If the user wants to override the motion sensing turning on the lights
+let override = false;
 
-}
+//Time untill, after not being reset the lights will turn themselves off
+let timeTillOff = 600000;
 
-const timeMatch = hour => {
+// Send a sentence to the front end when a time is matched
+const timeBasedPrompt = (text, time) => {
 
-    if (!moment(hour,"HH:mm").isValid()) {
+    if (!moment(time,"HH:mm").isValid()) {
                 
         throw new Error('Time format not valid');
         
     }
 
-    return hour === moment().format("HH:mm");
+    if (time === moment().format("HH:mm")) {
 
-}
-
-// Send a sentence to the front end when a time is matched
-const timeBasedPrompt = (socket, text, time) => {
-
-    if (timeMatch(time)) {
-
-        socket.emit('speechFromBackEnd', text)
+        event.emit('speechFromBackEnd', text)
 
     }
 
 }
 
-module.exports = socket => {        
+module.exports.checkTimeSinceLastMovementSince = currentTime => {
 
-    setInterval(() => {
-
-        let currentTime = moment().format("HH:mm")
-
-        // client = clientio.connect('http://192.168.1.108:3013');
-        
-        if (currentTime === "06:10") {
-
-            eventHandler.emit("morning", socket)
-                
-        }
-
-        timeBasedPrompt(socket, "you need to go to work now", "08:20")
-
-        timeBasedPrompt(socket, "Hey man, bed time soon", "23:00")
-
-        welcomeHome.reset(currentTime)
-
-        if (checkTimeSinceLastMovement() && moment().isoWeekday() <= 5) {
-
-            eventHandler.emit("lightsOff");
-            
-        };
-        // spotify.getState((err, state) => {
-         
-        //     socket.emit("trackTimeInfo", state)
-
-        // }); 
-
-        // spotify.getTrack((err, track) => {
-
-        //     socket.emit('spotifyTrackInfo', track)       
-
-        // })
-
-    }, 60000)
-
+    return currentTime > (timeSinceMovement + timeTillOff)
 
 }
 
-module.exports.resetMovementTimer = () => {
+setInterval(() => {
 
-    timeSinceMovement = Date.now();
+    let currentMinute = moment().format("HH:mm");
+
+    console.log(currentMinute)
+
+    if (currentMinute === "06:00") {event.emit("morning")};
+
+    if (currentMinute === "17:00") {event.emit("resetUserHome")};
+
+    if (currentMinute === "23:30") {event.emit("corridorLight",false)};
+
+    //Reminders that are removed if the user overrides
+    if(!override) {
+
+        timeBasedPrompt("Wake up, you have to progam me to do more", "06:10");
+        
+        //No movement for 'timeTillOff' time above has been reached, is it Mon-Friday, is it overridded by the user
+        if (module.exports.checkTimeSinceLastMovementSince(Date.now()) && moment().isoWeekday() <= 7) {
+
+            event.emit("bedroomLight",false);
+            event.emit("bathroomLight",false);
+            event.emit("corridorLight",false);
+        
+        };
+    }
     
-} 
+    //Reminders through the day
+    timeBasedPrompt("Hey man, bed time soon", "23:00");
+
+}, 60000);
+
+//Every 2000 millseconds update the front end with info about the current song
+setInterval(() => {event.emit("updateSpotifyStates")},10000);
+
+//When motion is sensed reset the time since last movement
+event.on("resetMovementTimer", () => {timeSinceMovement = Date.now()});
+
+//Stop certain functionality if the user overrides
+event.on("override", () => {override = !override});

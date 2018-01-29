@@ -16,27 +16,64 @@ const chai = require('chai'),
 
     should = chai.should;
 
-let private_checkSum = lightAction.__get__("checkSum");
+// let private_theLightIs = lightAction.__get__("theLightIs");
 
 
 // let private_bedroomLightRelay = lightAction.__get__("checkSum");
 
-describe('A function to abstrct the flipping of lights', () => {
+xdescribe('A function to abstrct the flipping of lights', () => {
   
-  	describe('#checkSum()', () => {
+  	describe('#theLightIs()', () => {
 
-        xit('Should return a bool when two intergers are the same', () => {
-            
-            let fakeLight = {};
-            
-            fakeLight.value = 30;
-            
-            fakeLight.range = [1,30];
+        let fakeLight = {};
 
-            expect(private_checkSum(fakeLight)).to.be.true
+        fakeLight.range = [1,30];
+
+        it('Should throw an error if you pass in something that isnt the min or max value', () => {
+            
+            fakeLight.value = null;
+
+            expect(private_theLightIs(fakeLight)).to.be.an('error')
 
 
         });
+
+        it('Should return a true when the light is on and you want it off', () => {
+
+            fakeLight.value = 30;
+
+            expect(private_theLightIs(fakeLight,false)).to.be.true
+
+
+        });
+
+        it('Should return a false when the light is off and you want it on', () => {
+            
+            fakeLight.value = 1;
+
+            expect(private_theLightIs(fakeLight,true)).to.be.false
+
+
+        });
+
+        it('Should return an error if the light is on and you want it on', () => {
+
+            fakeLight.value = 30;
+
+            expect(private_theLightIs(fakeLight,true)).to.be.an('error')
+
+
+        });
+
+        it('Should return an error if the light is not in the ranges values', () => {
+
+            fakeLight.value = 2;
+
+            expect(private_theLightIs(fakeLight,false)).to.be.an('error')
+
+
+        });
+
 
   	});
 

@@ -1,203 +1,141 @@
 "use strict";
 
 //External libraries
-const childProc = require('child_process');
-const spotify = require('spotify-node-applescript');
+const childProc = require('child_process'),
+    spotify = require('spotify-node-applescript'),
+    //Internal libraries
+    app = require('./modules/speechServer.js'),
+    boardSetUp = require('./modules/boardSetUp.js'),
+    computer = require('./modules/computer.js'),
+    morning = require('./modules/morning.js'),
+    fetchNewsData = require('./modules/fetchNewsData.js'),
+    fetchWeatherData = require('./modules/fetchWeatherData.js'),
+    welcomeHome = require('./modules/welcomeHome.js'),
+    event = require('./modules/event'),
+    timer = require('./modules/timer.js'),
+    applicationSearch = require('./modules/applicationSearch.js'),
+    piServer = require('./modules/piServer.js'),
+    spanish = require('./modules/spanish.js'),
+    io = require('socket.io').listen(server),
+    musicControls = require('./modules/musicControls.js'),
+    wikiQuery = require('./modules/wikiQuery.js'),
+    setVolume = require('./modules/setVolume.js'),
+    browserControls = require('./modules/browserControls.js'),
+    userInformation = require('./modules/userInformation.js')
 
-//internal libraries
-const app = require('./modules/speechServer.js');
-let boardSetUp = require('./modules/boardSetUp.js')
-const computer = require('./modules/computer.js');
-const morning = require('./modules/morning.js');
-const api = require('./modules/api.js');
-const eventHandler = require('./modules/eventHandler');
-const timer = require('./modules/timer.js');
-const piServer = require('./modules/piServer.js');
-const spanish = require('./modules/spanish.js');
-const io = require('socket.io').listen(server);
-const musicControls = require('./modules/musicControls.js');
-const wikiQuery = require('./modules/wikiQuery.js');
-const setVolume = require('./modules/setVolume.js');
-const browserControls = require('./modules/browserControls.js');
-
+//Establish link with the front end and handle socket events
 io.on('connection', socket => { 
+    console.log("hi")
+    // event.emit('morning')
 
-    timer(socket)
+    socket.on('error', err => {new Error(err)}); 
 
-    socket.on('error', err => {console.log(err)});
+    socket.on('musicControls', res => {event.emit("musicControls",res)});
 
-    socket.on('musicControls', res => {musicControls(res)})
+    socket.on('wikiQuery', res => {event.emit("wikiQuery",res)});
 
-    socket.on('wikiQuery', res => {wikiQuery(res,socket)}) 
+    socket.on('setVolume', volume => {setVolume(volume)}); 
 
-    socket.on('setVolume', volume => {setVolume(volume)});
-    
-    socket.on('spanish', () => {
-        console.log('hit spanish'); 
-        eventHandler.emit('spanish', socket)
-    });
+    socket.on('browserControls', res => {event.emit("browserControls",res)});
 
-    socket.on('browserControls', res => {browserControls(res)})
+    socket.on('setSpotifyVolume', int => {spotify.setVolume(int)});
 
-    socket.on('setSpotifyVolume', int => {spotify.setVolume(int)})
+    socket.on('bedroom', cmd => {event.emit('bedroomLight',cmd)});
 
-    socket.on('screen', action => {
+    socket.on('bedroomToggle', () => {event.emit('bedroomLightToggle')});
 
-        if (computer.digest(action)) {
+    socket.on('lights', cmd => {event.emit('bedroomLight',cmd);event.emit('bathroomLight',cmd)});
 
-            computer.screenWake()
+    socket.on('bathroom', cmd => {event.emit('bathroomLight',cmd)});
 
-        } else {
+    socket.on('screen', action => {computer.digest(action) ? computer.screenWake():computer.screenSleep()});
 
-            computer.screenSleep()
+    socket.on('playUserPlaylist', res => {spotify.playTrackInContext('spotify:track:4H1QorBfrOrShDyHZAxQoM', userInformation.spotifyUser+userInformation.spotifyPlaylist)});
 
-        }
-        
-    });
+    socket.on('playTrack', res => {spotify.playTrack('spotify:track:' + res)});
 
-    socket.on('bedroom', cmd => {
+    socket.on('applicationSearch', res => {event.emit("applicationSearch", res)});
 
-        if(computer.digest(cmd)) {
-        
-            eventHandler.emit('bedroomLightOn');
+    socket.on('spanish', () => {event.emit('spanish')});
 
-        } else {
+    socket.on('override', () => {event.emit('override')});
 
-            eventHandler.emit('bedroomLightOff');
+    socket.on('news', () => {fetchNewsData(data => {event.emit('news', data)})});
 
-        }
+    socket.on('weather', () => {fetchWeatherData(data => {event.emit('weather', data)})});
 
-    });
+    socket.on('corridorMotion', () => {event.emit('corridorMotion')});
 
-    socket.on('lights', cmd => {
+    socket.on("weatherCompleteMorning", () => {
 
-        if(computer.digest(cmd)) {
+        fetchNewsData(data => {
 
-            eventHandler.emit('bedroomLightOn')
-        
-            eventHandler.emit('bathroomLightOn')
-
-        } else {
-
-            eventHandler.emit('bedroomLightOff')
-        
-            eventHandler.emit('bathroomLightOff')
-        }
-        
-
-    });
-
-    socket.on('bathroom', cmd => {
-
-        if(computer.digest(cmd)) {
-
-            eventHandler.emit('bathroomLightOn')
-
-        } else {
-
-            eventHandler.emit('bathroomLightOff')
-
-        }
-
-    });
-
-    socket.on('bedroomToggle', () => {
-
-        eventHandler.emit('bedroomLightToggle')
-
-    });
-
-    socket.on('news', res => {
-
-        api.fetchNewsdata(data => {
-
-            socket.emit('news', data)
+            data.morning = true;
+            event.emit('news', data)
 
         });
 
     });
 
-    socket.on('weather', () => {
-        
-        api.fetchWeaterData(data => {
-            
-            data.morning = false;
+    socket.on("newsCompleteMorning", () => {
 
-            socket.emit('weather', data)
+        event.emit('musicControls','play');
+
+        setTimeout(() => {
             
-        });
+            event.emit('musicControls','pause');
+            event.emit("spanish", socket);
+            
+        }, 60000);
 
     });
 
-    socket.on('applicationSearch', res => {
+    event.on("speechFromBackEnd", text => {socket.emit("speechFromBackEnd", text)});
 
-        switch(res.vessel) {
+    event.on('wikiResult', context => {socket.emit('wikiResult', context)});
 
-            case 'Facebook':
+    event.on("weather", data => {socket.emit("weather", data)});
 
-                childProc.exec('open -a "Google Chrome" --new --args -ingognito https://www.facebook.com/search/top/?q=' + res.search);
+    event.on("news", data => {socket.emit("news", data)});
 
-            break;
+    event.on("speechFromBackEndSpanish", text => {socket.emit("speechFromBackEndSpanish", text)});
 
-            case 'YouTube':
+    event.on("updateSpotifyStates", () => {
 
-                childProc.exec('open -a "Google Chrome" --new --args -ingognito https://www.youtube.com/results?search_query=' + res.search);
+        spotify.getState((err, state) => {
+         
+            socket.emit("trackTimeInfo", state);
 
-            break;
-        }
+        }); 
 
-    })
+        spotify.getTrack((err, track) => {
 
-    socket.on('playUserPlaylist', res => {
-
-        spotify.setVolume(80);
-
-        spotify.playTrackInContext('spotify:track:4H1QorBfrOrShDyHZAxQoM', 'spotify:user:1130242707:playlist:6Gj9EYigkSxPRFox6rLSC8');
-
-    })
-
-    socket.on('playTrack', res => {
-
-        spotify.playTrack('spotify:track:' + res, () => {
-            
-            spotify.getTrack((err, track) => {
-                
-                if(error) throw 'error in playing track ' + error;
-
-                socket.emit('trackInfo', track)
-
-            });
+            socket.emit('spotifyTrackInfo', track);      
 
         });
 
-    })
+    });
 
 });
 
-eventHandler.on('checkStatus', callback => {
+event.on('checkStatus', () => {
     
     let sessionData = io.nsps["/"].connected;
+
+    if (Object.keys(sessionData).length===0) {
+            
+        childProc.exec('open -a "Google Chrome" --new --args https://localhost:3003 --ignore-certificate-errors')  ;  
     
-    let bool = Object.keys(sessionData).length>0
+    } else {
 
-    callback(bool);
+        console.log('Session already exists');
 
-})
+    }
+
+});
 
 setTimeout(() => {
 
-    eventHandler.emit('checkStatus', bool => {
+    event.emit('checkStatus')
 
-        if(!bool){
-            
-            childProc.exec('open -a "Google Chrome" --new --args https://localhost:3002 --ignore-certificate-errors')    
-        
-        } else {
-
-            console.log('Session already exists')
-
-        }
-        
-    })
-
-}, 2000);
+}, 6000);

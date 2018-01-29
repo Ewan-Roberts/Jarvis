@@ -15,17 +15,17 @@ const sinon = require("sinon");
 const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 
-let private_checkTimeSinceLastMovement = timer.__get__("checkTimeSinceLastMovement");
+// let private_checkTimeSinceLastMovement = timer.__get__("checkTimeSinceLastMovement");
 
-let private_timeMatch = timer.__get__("timeMatch");
+// let private_timeMatch = timer.__get__("timeMatch");
 
-let private_timeBasedPrompt = timer.__get__("timeBasedPrompt");
+// let private_timeBasedPrompt = timer.__get__("timeBasedPrompt");
 
-let private_timeSinceLastMovement = timer.__get__("timeSinceMovement");
+// let private_timeSinceLastMovement = timer.__get__("timeSinceMovement");
 
 let timeSinceMovement = Date.now();
 
-describe('Running timer through the prgram promting on trigger times', () => {
+xdescribe('Running timer through the prgram promting on trigger times', () => {
 
     describe('#timeBasedPrompt()', () => {
         

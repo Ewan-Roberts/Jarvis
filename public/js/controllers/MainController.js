@@ -30,7 +30,7 @@ function MainCtrl($scope, socket) {
 
             if (i === 2) {
 
-                seperator = ". end of stories,. I hope the world is not too messed up today good,. luck";
+                seperator = ". end of stories,. I hope the world is not too messed up today " + res.name + " good,. luck";
 
             }
 
@@ -38,7 +38,15 @@ function MainCtrl($scope, socket) {
 
         }
 
-        responsiveVoice.speak(headlineTogether, "UK English Male", {rate: 0.8, pitch: 1});
+        responsiveVoice.speak(headlineTogether, "UK English Male", {rate: 0.8, pitch: 1, onend: () => {
+            
+            if (res.morning){
+
+                socket.emit("newsCompleteMorning")    
+
+            }
+
+        }});
 
     })
     

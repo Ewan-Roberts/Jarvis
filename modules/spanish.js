@@ -1,7 +1,7 @@
 
 'use strict';
 
-const eventHandler = require('./eventHandler');
+const event = require('./event');
 
 const fs = require('fs');
 
@@ -32,11 +32,7 @@ const writeIncrement = obj => {
 
     obj = JSON.stringify(obj);
 
- 	fs.writeFile('./globalStates.json', obj, err => {
-            
- 		if (err) throw err;
-
-	});
+ 	fs.writeFile('./globalStates.json', obj, err => {if (err) throw err});
 
 }
 
@@ -64,7 +60,6 @@ const stripSpanishWords = obj => {
 
 // Strips out the word and resolve to it so it can be passed 
 const getSpanishWord = new Promise((resolve,reject) => {
-	console.log('hit spanish 3')
 
 	readIncrement.then(obj => {
 
@@ -82,14 +77,12 @@ const getSpanishWord = new Promise((resolve,reject) => {
 
 });
 
-
-
 // Bind the event globally and send it to the front end
-eventHandler.on("spanish", socket => {
+event.on("spanish", () => {
 
 	getSpanishWord.then(str => {
 		
-		socket.emit('speechFromBackEndSpanish', str)
+		event.emit("speechFromBackEndSpanish", str)
 
 	})
 

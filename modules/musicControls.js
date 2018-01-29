@@ -1,35 +1,63 @@
-const spotify = require('spotify-node-applescript');
+"use strict";
 
-const childProc = require('child_process');
+const spotify = require('spotify-node-applescript'),
+    childProc = require('child_process'),
+    event = require('./event.js');
 
-module.exports = res => {
+event.on("musicControls", res => {
 
     switch(res) {
                 
         case 'next':
-            spotify.next()
+            spotify.next();
             break;
 
         case 'play':
-            spotify.play()
+            spotify.play();
             break;
 
         case 'pause':
-            spotify.pause()
+            spotify.pause();
             break;
 
         case 'back':
-            spotify.previous()
+            spotify.previous();
             break;
 
         case 'up':
+
             childProc.exec('osascript -e "set Volume 6"');
-            spotify.volumeUp()
+            
+            spotify.getState((err, obj) => {
+
+                let state = obj.state;
+
+                if(state <= 80) {
+                    
+                    spotify.volumeUp();
+
+                }
+
+            })
+            
             break;
 
         case 'down':
+
             childProc.exec('osascript -e "set Volume 6"');
-            spotify.volumeDown()
+            
+            spotify.getState((err, obj) => {
+
+                let state = obj.state;
+
+                if(state => 20) {
+                    
+                    spotify.volumeDown();
+
+                }
+
+            })
+
             break;
 
         case 'full':
@@ -44,4 +72,5 @@ module.exports = res => {
 
     }
     
-}
+})
+

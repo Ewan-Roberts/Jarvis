@@ -271,6 +271,12 @@ let commands = {
 
     },
 
+    'override': () => {
+
+        socket.emit('override')
+
+    },
+
     'clear': () => { 
 
         $('.leftTab').fadeOut('slow') 

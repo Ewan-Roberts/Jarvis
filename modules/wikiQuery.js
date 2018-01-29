@@ -1,53 +1,36 @@
 "use strict";
 
-const cheerio = require('cheerio');
-const request = require('request');
+const cheerio = require('cheerio'),
+    request = require('request'),
+    event = require('./event');
 
-module.exports = (res,socket) => {
+event.on("wikiQuery",res => {
 
-    let url = 'https://en.wikipedia.org/wiki/' + res;
-
-        request(url, (error, response, html) => {
+    request('https://en.wikipedia.org/wiki/' + res, (error, response, html) => {
 
         if(!error){
             
             let $ = cheerio.load(html);            
 
-            if($('.mbox-small').length > 0) {
+            if($('.mbox-small').length > 0) {$('.mbox-small').remove()}
 
-                $('.mbox-small').remove()
+            if($('.vertical-navbox').length > 0) {$('.vertical-navbox').remove()}
 
-            }
-
-            if($('.vertical-navbox').length > 0) {
-
-                $('.vertical-navbox').remove()
-
-            }
-
-            if($('#mw-content-text').find('p').first().children().text().indexOf("this message may") > -1) {
-
-                logger.log('No result for what you search for')
+            if($('#mw-content-text').find('p').first().children().text().indexOf("this message may") > -1) {console.log('No result for what you search for')
+                
+                event.emit('wikiResult', 'No results')
 
             }
 
             if($('#mw-content-text').find('p').first().text().indexOf("may refer") > -1) {
             
-                if($('#toc').length > 0) {
+                if($('#toc').length > 0) {$('#toc').remove()}
 
-                    $('#toc').remove()
-                }
-
-                if($('.mbox-small').length > 0) {
-
-                    $('.mbox-small').remove()
-                }   
+                if($('.mbox-small').length > 0) {$('.mbox-small').remove()}   
 
                 let firstInList = $('#mw-content-text').find("li").find("a").first().attr('href')
 
-                let url2 = 'https://en.wikipedia.org' + firstInList;
-
-                request(url2, (error, response, html) => {
+                request('https://en.wikipedia.org' + firstInList, (error, response, html) => {
                     
                     let $ = cheerio.load(html);
                     
@@ -55,24 +38,30 @@ module.exports = (res,socket) => {
 
                         let context = $("p", "#mw-content-text").first().text();
 
-                        socket.emit('wikiResult', context)
+                        let info = context.replace(/[`~!@#$%^&*()_|+\-=?;:'"<>\{\}\[\]\\\/]/gi, ' ')
+
+                        event.emit('wikiResult', info)
 
                     }
 
                 })
 
-            }
-
-            else {
+            } else {
 
                 let context = $("p", "#mw-content-text").first().text();
 
-                socket.emit('wikiResult', context)
+                let info = context.replace(/[`~!@#$%^&*()_|+\-=?;:'"<>\{\}\[\]\\\/]/gi, ' ')
+
+                event.emit('wikiResult', info)
 
             }
+
+        } else {
+
+            event.emit('wikiResult', 'Error pulling the data from Wikipedia');
 
         }
 
     })
     
-}
+})

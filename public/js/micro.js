@@ -16,11 +16,17 @@ jQuery(document).ready($ =>{
 
     // socket.emit('news');
 
+    socket.emit("bedroom",true)
+
     socket.emit('trackTime');
 
     socket.on('spotifyTrackInfo', res => {
-
-        $('.musicName').text(res.artist + " - " + res.name );
+        if(res === null) {
+            console.log('no track defined');
+        } else {
+            $('.musicName').text(res.artist + " - " + res.name );    
+        }
+        
 
     });
 
@@ -40,17 +46,12 @@ jQuery(document).ready($ =>{
         
         responsiveVoice.speak(data.english, "UK English Male", {rate: 0.8, onend: function() {
 
-            responsiveVoice.speak(data.spanish, 'Spanish Female', {rate: 0.6})
+            responsiveVoice.speak(data.spanish, 'Spanish Female', {rate: 0.7})
 
         }})
 
     })
 
-    socket.on('pi', response => {
-
-        console.log(response);
-
-    });
 
     socket.on('weather', res => {
         
@@ -58,7 +59,11 @@ jQuery(document).ready($ =>{
 
         if(res.morning) {
 
-            responsiveVoice.speak("Good morning Ewan. Today is " + moment().format('dddd') + " and todays weather will be, " + res.list[0].weather[0].description + " and the temperature is. " + (res.list[0].temp.day).toString(), "UK English Male", {rate: 0.8});       
+            responsiveVoice.speak("Good morning Ewan. Today is " + moment().format('dddd') + " and todays weather will be, " + res.list[0].weather[0].description + " and the temperature is. " + (res.list[0].temp.day).toString(), "UK English Male", {rate: 0.8, onend: () => {
+
+                socket.emit("weatherCompleteMorning")
+
+            }});       
 
         } else {
                 
@@ -76,11 +81,15 @@ jQuery(document).ready($ =>{
 
     socket.on("wikiResult", res => {
 
-        let removeCruft = res.replace(/[`~!@#$%^&*()_|+\-=?;:'"<>\{\}\[\]\\\/]/gi, ' ')
-
-        responsiveVoice.speak(removeCruft, "UK English Male", {rate: 0.9})
+        responsiveVoice.speak(res, "UK English Male", {rate: 0.9})
 
     })
+
+    socket.on('pi', response => {
+
+        console.log(response);
+
+    });
 
     $('.musicPrevious').click(() => {
 
@@ -106,9 +115,7 @@ jQuery(document).ready($ =>{
 
             socket.emit('musicControls', 'pause');
 
-        }
-
-        else{
+        } else{
 
             $('.musicState').text("ll");
 
@@ -120,7 +127,7 @@ jQuery(document).ready($ =>{
         
     });
 
-    if (annyang){
+    if (annyang) {
 
         annyang.start();
 

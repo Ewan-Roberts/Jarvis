@@ -10,7 +10,7 @@ const chai = require('chai'),
 
     should = chai.should;
 
-const api = require('../modules/api.js');
+// const api = require('../modules/api.js');
 
 describe('API calls', function() {
   

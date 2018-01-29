@@ -1,32 +1,44 @@
 "use strict";
 
-const five = require("johnny-five");
-
-let eventHandler = require('./eventHandler.js');
-
-let timer = require('./timer.js');
-
-const moment = require('moment');
+const five = require("johnny-five"),
+    moment = require('moment'),
+    event = require('./event.js'),
+    timer = require('./timer.js'),
+    computer = require('./computer.js')
 
 // Set up the johnny five modules, these are loaded when boardSetUp is called
-let bedroomMotion = new five.Motion({
+let bedroomSensor = new five.Motion({
     
-    pin: 48,
+    pin: 22,
     freq: 200,
     calibrationDelay: 50
 
 });
 
-//Pass the functionality to a global event handler 
-//If this monday to Friday welcome the user home
-bedroomMotion.on("motionstart", () => {
+let hallwaySensor = new five.Motion({
+    
+    pin: 23,
+    freq: 200,
+    calibrationDelay: 50
 
-    if (moment().isoWeekday() <= 5) {
+});
 
-        // eventHandler.emit("bedroomLightOn")
+const motionStart = () => {
+
+    //If this monday to Friday welcome the user home
+    if (moment().isoWeekday() <= 7 && timer.checkTimeSinceLastMovementSince(Date.now()) && computer.isItDaytime()) {
+        
+        event.emit("welcomeHome");
+
+        event.emit("bedroomLight", true);
 
     }
+    event.emit("resetMovementTimer");
 
-    timer.resetMovementTimer()
+}
 
-}); 
+bedroomSensor.on("motionstart", () => {motionStart()}); 
+
+hallwaySensor.on("motionstart", () => {motionStart()}); 
+
+event.on("corridorMotion", () => {motionStart()});
