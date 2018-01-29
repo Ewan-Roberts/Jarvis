@@ -36,11 +36,11 @@ npm install
 
 Johnny-Five is one of the corner stones of the functionality and uses a protocol called Firmata to communicate over USB to the microcontroller.
 
-___Setting Up Firmata___
+### Setting Up Firmata
 
-Before you can start you will need to load Firmata onto your Arduino-compatible microcontroller:
+- Before you can start you will need to load Firmata onto your Arduino-compatible microcontroller:
 
-___Download Arduino IDE___
+### Download Arduino IDE
 
 - Connect your Arduino-compatible microcontroller via USB
 - Launch Arduino IDE and open the Firmata sketch via the menu: File > Examples > Firmata > StandardFirmata
