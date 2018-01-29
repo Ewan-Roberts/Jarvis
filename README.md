@@ -19,9 +19,9 @@ npm install
 1. Node.js: You will require the latest version of Node.js, that can download here: https://nodejs.org/en/download/
 
 2. API Keys: You will require an API key for the news, weather functions and you will require your user id from Spotify for Spotify to work. These API keys are to be replaced in the userInformation.js file under modules. Keys can be created below for free:
-* api.openweathermap.org
-* api.nytimes.com
-* Spotify ID can be found when you share your profile link, and it should be after http://open.spotify.com/user/
+..* api.openweathermap.org
+..* api.nytimes.com
+..* Spotify ID can be found when you share your profile link, and it should be after http://open.spotify.com/user/
 
 3. MacOS: Currently functionality for Spotify is using applescript and therefore requires macOS
 
