@@ -1,12 +1,12 @@
 
-Jarvis is a voice and motion activated home automation platform. It provides developers with everything from automating light switching and door opening, to welcoming users home with the news of the day and their favourite songs on Spotify.
+Jarvis is a voice and motion activated home automation platform. It provides developers with everything from: automating lights doors, to welcoming users home with the news of the day and their favourite song on Spotify.
 
-Additionally, Jarvis is built in a modular fashion, allowing additional functionality to constantly be added as long as data can be transmitted through shared sockets.
+Additionally, Jarvis is built in a modular fashion, allowing additional functionality to constantly be added, as long as data can be transmitted through shared sockets. An example of an extension can be found here: [Jarvis Extension](https://github.com/vanguard12/Jarvis-RaspberryPiExtention)
 
 ## Getting Started
 
 
-To get started clone the repository and install the required dependencies:
+To get started, clone the repository and install the required dependencies:
 
 ```
 git clone https://github.com/vanguard12/Jarvis.git
@@ -16,19 +16,20 @@ npm install
 
 ### Prerequisites
 
-- Node.js: You will require the latest version of Node.js which can download here: https://nodejs.org/en/download/
+- Node.js: You will require the latest version of Node.js, that can download here: https://nodejs.org/en/download/
 
-- API Keys: You will require an API key for the news, weather and you will require your user id from Spotify for functionality to work:
+- API Keys: You will require an API key for the news, weather functions and you will require your user id from Spotify for Spotify to work:
 
-These keys are to be replaced in the userInformation.js file under modules. Keys can be created below for free:
+These API keys are to be replaced in the userInformation.js file under modules. Keys can be created below for free:
 - api.openweathermap.org
 - api.nytimes.com
+- Spotify ID can be found when you share your profile link, and it should be after http://open.spotify.com/user/
 
-- MacOS: Currently functionality for Spotify is using applescript and therefore this functonality will only work on macOS
+- MacOS: Currently functionality for Spotify is using applescript and therefore requires macOS
 
-- Arduino: You will require an Arduino, Firmata and servos set up on any light switches you would like to automate, more details of which can be found in the hardware and Arduino section below. 
+- Arduino: You will require an Arduino, Firmata and servos set up on any light switches you would like to automate. More details of which can be found in the hardware and Arduino sections below. 
 
-- Modules: For a full feature list please refer to https://github.com/vanguard12/Jarvis-RaspberryPiExtention for controls of additional lights, open and closing of doors and buttons to control functionality.
+- Modules: For a full feature list please refer to https://github.com/vanguard12/Jarvis-RaspberryPiExtention for controls of additional lights, the open and closing of doors and buttons to control functionality.
 
 - Johnny-Five: A good understanding of http://johnny-five.io/ is highly recommended for additional extensions. They have created a very user friendly and simple API. API documentation here: https://github.com/rwaldron/johnny-five
 
@@ -52,7 +53,7 @@ ___Download Arduino IDE___
 
 ### Hardware
 
-The layout of the hardware wiring for Jarvis and an additional module can be found below:
+The layout of the hardware wiring for Jarvis and the additional extension can be found below:
 
 The wiring for the project is below like:
 ![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
@@ -65,7 +66,7 @@ More details of the extension can be found here: https://github.com/vanguard12/J
 
 ### Installing
 
-Once the prerequisites are completed go to root and run 
+Once the prerequisites are completed, go to root and run:
 
 ```
 node speechServer.js
@@ -77,13 +78,13 @@ This will require going through unsecure local network and allowing the micropho
 
 ## Running The Tests
 
-Tests have not been created for each function, however most complicated functionality is covered. You can run these tests at root with mocha
+Tests have not been created for each function, however most complicated functionality is covered. You can run these tests at root with "npm test"
 
 ## BOOL/Spat Management
 
-In Jarvis *spats* are used that effectively take an input and pass the string to the back end to be interpreted. If these spats are to indicated an on or off state they are digested as shown out below:
+In Jarvis *spats* are used. Effectively they represent an input and pass the string to the back end to be interpreted. If these spats are to indicate an on or off state, they are digested as demonstrated below:
 
-for all BOOL STATEMENT's the below words can be used: 
+BOOL statements are linked to the below words: 
 
 'true'
 'go'
@@ -101,19 +102,21 @@ return true
 'halt'
 return false
 
-## Example
+For example: "bedroom {on}", "bedroom {turn on}", "bedroom {start}" would all turn the light on.
+
+## Example Of Combined Functionality
 
 [![Some functions together](https://img.youtube.com/vi/FZidrpRyMmw/0.jpg)](http://www.youtube.com/watch?v=FZidrpRyMmw)
 
 
-## Commands
+## Command List
 
 ```
 'what is the weather'
 ```
 [![Some functions together](https://img.youtube.com/vi/MQJssPOCcvs/0.jpg)](http://www.youtube.com/watch?v=MQJssPOCcvs)
 
-Reads out the weather for the day and displayed the weeks weather on the front end 
+Reads out the weather for the day and displays the weeks weather on the front end 
 
 ```
 'bedroom ' BOOL STATEMENT || 'bathroom ' BOOL STATEMENT || 'lights ' BOOL STATEMENT
@@ -128,7 +131,7 @@ Turns on or off the bedroom lights || Turns on or off the bathroom lights || bot
 [![Spanish Word](https://img.youtube.com/vi/putezPJB2xE/0.jpg)](http://www.youtube.com/watch?v=putezPJB2xE)
 
 
-Reads out a new word from a list of a few hundred words in english then translates it into spanish and conjugates it in present tense in spanish
+Reads out a new word from a list of a few hundred words in english, then translates it into spanish and conjugates it in present tense
 
 ```
 'what is the time'
@@ -142,7 +145,7 @@ Reads out the current time
 ```
 [![News fetch](https://img.youtube.com/vi/PFzltRlG_b4/0.jpg)](http://www.youtube.com/watch?v=PFzltRlG_b4)
 
-Reads out your specified news articles
+Reads out your specified news articles from the New York Times
 
 ```
 'Pause' || 'play' || 'next' || 'back' || stop
@@ -154,7 +157,7 @@ Issues Spotify with the above commands
 ```
 'open' 'Facebook' || 'You Tube'
 ```
-Open an instance of google and one of the above sites
+Opens an instance of Google/Facebook/YouTube
 
 [![Open Tabs](https://img.youtube.com/vi/LHDqOTiI6ZI/0.jpg)](http://www.youtube.com/watch?v=LHDqOTiI6ZI)
 
@@ -163,19 +166,19 @@ Open an instance of google and one of the above sites
 ```
 [![Open Tabs](https://img.youtube.com/vi/bTU4utSTPNY/0.jpg)](http://www.youtube.com/watch?v=bTU4utSTPNY)
 
-Open facebook or youtube and search for the thing you specify
+Open Facebook or YouTube and search for the *spat* specified
 
 ```
 'play my playlist' || 'play some music'
 ```
 [![Open Tabs](https://img.youtube.com/vi/-WgycpPOQEc/0.jpg)](http://www.youtube.com/watch?v=-WgycpPOQEc)
 
-Plays your Spotify playlist || Plays a song of your choosing
+Plays users Spotify playlist || Plays a song of your choosing
 
 ```
 'search for song' *Spat
 ```
-Searches Spotify for the song you specify and plays the best match
+Searches Spotify for the *spat* you specify and plays the best match
 
 ```
 'Wikipedia' *spat
