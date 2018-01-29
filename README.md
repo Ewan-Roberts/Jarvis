@@ -57,10 +57,9 @@ The layout of the hardware wiring for Jarvis and the additional extension can be
 
 ![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
 
-For the extension the wiring is below: 
+For the extension the wiring is below, with more information on the extension here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
 ![Alt text](https://raw.githubusercontent.com/vanguard12/Jarvis-RaspberryPiExtention/master/images/piServer.jpg?raw=true "Fritzing version of hardware set up")
 
-More details of the extension can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
 
 
 ## Installing
