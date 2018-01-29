@@ -16,20 +16,20 @@ npm install
 
 ## Prerequisites
 
-- Node.js: You will require the latest version of Node.js, that can download here: https://nodejs.org/en/download/
+- **Node.js:** You will require the latest version of Node.js, that can download here: https://nodejs.org/en/download/
 
-- API Keys: You will require an API key for the news, weather functions and you will require your user id from Spotify for Spotify to work. These API keys are to be replaced in the userInformation.js file under modules. Keys can be created below
+- **API Keys:** You will require an API key for the news, weather functions and you will require your user id from Spotify for Spotify to work. These API keys are to be replaced in the userInformation.js file under modules. Keys can be created below
   - api.openweathermap.org
   - api.nytimes.com
   - Spotify ID can be found when you share your profile link, and it should be after http://open.spotify.com/user/
 
-- MacOS: Currently functionality for Spotify is using applescript and therefore requires macOS
+- **MacOS:** Currently functionality for Spotify is using applescript and therefore requires macOS
 
-- Arduino: You will require an Arduino, Firmata and servos set up on any light switches you would like to automate. More details of which can be found in the hardware and Arduino sections below. 
+- **Arduino:** You will require an Arduino, Firmata and servos set up on any light switches you would like to automate. More details of which can be found in the hardware and Arduino sections below. 
 
-- Modules: For a full feature list please refer to https://github.com/vanguard12/Jarvis-RaspberryPiExtention for controls of additional lights, the open and closing of doors and buttons to control functionality.
+- **Modules:** For a full feature list please refer to https://github.com/vanguard12/Jarvis-RaspberryPiExtention for controls of additional lights, the open and closing of doors and buttons to control functionality.
 
-- Johnny-Five: A good understanding of http://johnny-five.io/ is highly recommended for additional extensions. They have created a very user friendly and simple API. API documentation here: https://github.com/rwaldron/johnny-five
+- **Johnny-Five:** A good understanding of http://johnny-five.io/ is highly recommended for additional extensions. They have created a very user friendly and simple API. API documentation here: https://github.com/rwaldron/johnny-five
 
 
 ## Ardunio Set Up 
