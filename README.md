@@ -205,9 +205,9 @@ Regulates the volume in relation to the above selections
 Takes a BOOL statement and turns on/off your screen
 
 ```
-'timer for ' *Spat
+'timer for ' *Spat / stop / reset
 ```
-Takes the number of minutes, creates a timer on the front end and tells the user when the timer is complete
+Takes the number of minutes, creates a timer on the front end and tells the user when the timer is complete / pauses / resets
 
 ```
 'reload' or 'refresh'
