@@ -54,7 +54,7 @@ Johnny-Five is one of the corner stones of the functionality and uses a protocol
 
 The layout of the hardware wiring for Jarvis and the additional extension can be found below:
 
-The wiring for the project is below like:
+The wiring for the project is below:
 ![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
 
 For the extension the wiring is below: 
