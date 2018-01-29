@@ -64,7 +64,7 @@ For the extension the wiring is below, with more information on the extension he
 
 
 
-## Installing
+## Running
 
 Once the prerequisites are completed, go to root and run:
 
