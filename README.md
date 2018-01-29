@@ -33,7 +33,6 @@ npm install
 
 
 ## Ardunio Set Up 
-###### excerpt from the very helpful http://node-ardx.org/
 
 Johnny-Five is one of the corner stones of the functionality and uses a protocol called Firmata to communicate over USB to the microcontroller.
 
@@ -50,6 +49,7 @@ Johnny-Five is one of the corner stones of the functionality and uses a protocol
 - Upload the program by selecting File > Upload
 - If you are having trouble uploading, a full trouble shooting guide can be found here: http://ardx.org/TRBL
 
+###### excerpt from the very helpful http://node-ardx.org/
 
 ## Hardware
 
