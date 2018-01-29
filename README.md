@@ -6,7 +6,7 @@ Additionally, Jarvis is built in a modular fashion, allowing additional function
 ## Getting Started
 
 
-To get started, clone the repository and install the required dependencies:
+⋅⋅To get started, clone the repository and install the required dependencies:
 
 ```
 git clone https://github.com/vanguard12/Jarvis.git
@@ -34,7 +34,7 @@ npm install
 
 ## Ardunio Set Up 
 
-Johnny-Five is one of the corner stones of the functionality and uses a protocol called Firmata to communicate over USB to the microcontroller.
+⋅⋅Johnny-Five is one of the corner stones of the functionality and uses a protocol called Firmata to communicate over USB to the microcontroller.
 
 ### Setting Up Firmata
 
@@ -53,40 +53,40 @@ Johnny-Five is one of the corner stones of the functionality and uses a protocol
 
 ## Hardware
 
-The layout of the hardware wiring for Jarvis and the additional extension can be found below:
+⋅⋅The layout of the hardware wiring for Jarvis and the additional extension can be found below:
 
-The wiring for the project is below:
+⋅⋅The wiring for the project is below:
 ![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
 
-For the extension the wiring is below: 
+⋅⋅For the extension the wiring is below: 
 ![Alt text](https://raw.githubusercontent.com/vanguard12/Jarvis-RaspberryPiExtention/master/images/piServer.jpg?raw=true "Fritzing version of hardware set up")
 
-More details of the extension can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
+⋅⋅More details of the extension can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
 
 
 ## Installing
 
-Once the prerequisites are completed, go to root and run:
+⋅⋅Once the prerequisites are completed, go to root and run:
 
 ```
 node speechServer.js
 ```
 
-Then load https://localhost:3003/
+⋅⋅Then load https://localhost:3003/
 
-This will require going through unsecure local network and allowing the microphone to listen for key words, held in the command.js file. The list of commands can be found below:
+⋅⋅This will require going through unsecure local network and allowing the microphone to listen for key words, held in the command.js file. The list of commands can be found below:
 
 
 ## Running The Tests
 
-Tests have not been created for each function, however most complicated functionality is covered. You can run these tests at root with "npm test"
+⋅⋅Tests have not been created for each function, however most complicated functionality is covered. You can run these tests at root with "npm test"
 
 
 ## BOOL/Spat Management
 
-In Jarvis *spats* are used. Effectively they represent an input and pass the string to the back end to be interpreted. If these spats are to indicate an on or off state, they are digested as demonstrated below:
+⋅⋅In Jarvis *spats* are used. Effectively they represent an input and pass the string to the back end to be interpreted. If these spats are to indicate an on or off state, they are digested as demonstrated below:
 
-BOOL statements are linked to the below words: 
+⋅⋅BOOL statements are linked to the below words: 
 
 
 | True        | False       |    
@@ -100,7 +100,7 @@ BOOL statements are linked to the below words:
 | 'wake'      | 'pause'     |
 
 
-For example: "bedroom {on}", "bedroom {turn on}", "bedroom {start}" would all turn the light on.
+⋅⋅For example: "bedroom {on}", "bedroom {turn on}", "bedroom {start}" would all turn the light on.
 
 
 ## Example Of Combined Functionality
