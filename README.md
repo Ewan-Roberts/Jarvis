@@ -1,6 +1,7 @@
 
-Jarvis is a home automation platform running on Node.js. It is able to track movement, respond to commands and provide useful functionality to make everything from waking up in the morning to coming home more automated and interesting.
+Jarvis is a voice and motion activated home automation platform. It provides developers with everything from automating light switching and door opening, to welcoming users home with the news of the day and their favourite songs on Spotify.
 
+Additionally, Jarvis is built in a modular fashion, allowing additional functionalty to constantly be added as long as data can be transmitted through shared sockets.
 
 ## Getting Started
 
@@ -15,27 +16,43 @@ npm install
 
 ### Prerequisites
 
-You will require the latest version of Node.js which you can download here: https://nodejs.org/en/download/
+- Node.js: You will require the latest version of Node.js which can download here: https://nodejs.org/en/download/
 
-Functionality for Spotify is using applescript and therefore this functonality will only work on macOS
+- API Keys: You will require an API key for the news, weather and you will require your user id from spotify for functionality to work:
 
-You will require an Arduino and servos set up on any light switches you would like to automate, more details of which can be found in the hardware section below. 
+These keys are to be replaced in the userInformation.js file under modules. Keys can be created below for free:
+- api.openweathermap.org
+- api.nytimes.com
 
-This project is designed to be modular with aditional functionality being shared through sockets. Please refer to https://github.com/vanguard12/Jarvis-RaspberryPiExtention for controls of the lights, more automated lights and the opening and closing of doors.
+- MacOS: Currently functionality for Spotify is using applescript and therefore this functonality will only work on macOS
 
-A good understanding of http://johnny-five.io/ is highly reccomended for additional extentions. They have created a very user friendly and simple API. I suggest looking them up here: https://github.com/rwaldron/johnny-five
+- Arduino: You will require an Arduino, Firmata and servos set up on any light switches you would like to automate, more details of which can be found in the hardware and Arduino section below. 
 
-You will require an API key for the news, weather and you will require your user id from spotify for functionality to work. 
+- Modules: For a full feature list please refer to https://github.com/vanguard12/Jarvis-RaspberryPiExtention for controls of additional lights, open and closing of doors and buttons to control functionality.
 
-These keys are to be replaced in the api.js file under key.
+- Johnny-Five: A good understanding of http://johnny-five.io/ is highly reccomended for additional extentions. They have created a very user friendly and simple API. API documentation here: https://github.com/rwaldron/johnny-five
 
-api.openweathermap.org
 
-api.nytimes.com
+### Ardunio Set Up (excerpt from the very helpful http://node-ardx.org/)
+
+Johnny-Five is one of the corner stones of the functionality and uses a protocol called Firmata to communicate over USB to the microcontroller.
+
+___Setting Up Firmata___
+
+Before you can start you will need to load Firmata onto your Arduino-compatible microcontroller:
+
+___Download Arduino IDE___
+
+- Connect your Arduino-compatible microcontroller via USB
+- Launch Arduino IDE and open the Firmata sketch via the menu: File > Examples > Firmata > StandardFirmata
+- Select your Arduino board type (e.g. Arduino Uno) via Tools > Board
+- Select the port for your board via Tools > Serial Port > (the comm port of your Arduino)
+- Upload the program by selecting File > Upload
+- If you are having trouble uploading, a full trouble shooting guide can be found here: http://ardx.org/TRBL
 
 ### Hardware
 
-For this module a Macbook through an Arduino Mega is the controlling unit. Additional modules connect through the local network and share socket sessions for sharing functionality. 
+The layout of the hardware wiring for Jarvis and an additional module can be found below:
 
 The wiring for the project is below like:
 ![Alt text](public/images/jarvis_hardware.jpg?raw=true "Fritzing version of hardware set up")
@@ -43,7 +60,8 @@ The wiring for the project is below like:
 For the extention the wiring is below: 
 ![Alt text](https://raw.githubusercontent.com/vanguard12/Jarvis-RaspberryPiExtention/master/images/piServer.jpg?raw=true "Fritzing version of hardware set up")
 
-More details can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
+More details of the extention can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
+
 
 ### Installing
 
@@ -53,20 +71,34 @@ Once the prerequisites are completed go to root and run
 node speechServer.js
 ```
 
-Then load https://localhost:3001/
+Then load https://localhost:3003/
 
-This will require going through unsecure local network and allowing the microphone to listen for key words, held in the command.js file
+This will require going through unsecure local network and allowing the microphone to listen for key words, held in the command.js file. The list of commands can be found below:
 
-## Running the tests
+## Running The Tests
 
-Some tests have been created for api.js, clock.js and spanish.js functions. You can run these tests at root with mocha
+Tests have not been created for each function, however most complicated functionality is covered. You can run these tests at root with mocha
+
+## BOOL/Spat Management
+
+In Jarvis *spats* are used that effectively take an input and pass the string to the back end to be interpretted. If these spats are to indicated an on or off state they are digested as layed out below:
 
 for all BOOL STATEMENT's the below words can be used: 
 
-'true', 'go','on','turn on','begin','start','wake'
+'true'
+'go'
+'on'
+'turn on'
+'begin'
+'start'
+'wake'
 return true
 
-'false','off', 'turn off', 'stop', 'halt'
+'false'
+'off'
+'turn off'
+'stop'
+'halt'
 return false
 
 ## Example
