@@ -14,7 +14,7 @@ git clone https://github.com/vanguard12/Jarvis.git
 npm install
 ```
 
-### Prerequisites
+## Prerequisites
 
 - Node.js: You will require the latest version of Node.js, that can download here: https://nodejs.org/en/download/
 
@@ -34,7 +34,7 @@ These API keys are to be replaced in the userInformation.js file under modules. 
 - Johnny-Five: A good understanding of http://johnny-five.io/ is highly recommended for additional extensions. They have created a very user friendly and simple API. API documentation here: https://github.com/rwaldron/johnny-five
 
 
-### Ardunio Set Up (excerpt from the very helpful http://node-ardx.org/)
+## Ardunio Set Up (excerpt from the very helpful http://node-ardx.org/)
 
 Johnny-Five is one of the corner stones of the functionality and uses a protocol called Firmata to communicate over USB to the microcontroller.
 
@@ -51,7 +51,8 @@ ___Download Arduino IDE___
 - Upload the program by selecting File > Upload
 - If you are having trouble uploading, a full trouble shooting guide can be found here: http://ardx.org/TRBL
 
-### Hardware
+
+## Hardware
 
 The layout of the hardware wiring for Jarvis and the additional extension can be found below:
 
@@ -64,7 +65,7 @@ For the extension the wiring is below:
 More details of the extension can be found here: https://github.com/vanguard12/Jarvis-RaspberryPiExtention
 
 
-### Installing
+## Installing
 
 Once the prerequisites are completed, go to root and run:
 
@@ -76,9 +77,11 @@ Then load https://localhost:3003/
 
 This will require going through unsecure local network and allowing the microphone to listen for key words, held in the command.js file. The list of commands can be found below:
 
+
 ## Running The Tests
 
 Tests have not been created for each function, however most complicated functionality is covered. You can run these tests at root with "npm test"
+
 
 ## BOOL/Spat Management
 
@@ -104,9 +107,11 @@ return false
 
 For example: "bedroom {on}", "bedroom {turn on}", "bedroom {start}" would all turn the light on.
 
+
 ## Example Of Combined Functionality
 
 [![Some functions together](https://img.youtube.com/vi/FZidrpRyMmw/0.jpg)](http://www.youtube.com/watch?v=FZidrpRyMmw)
+
 
 
 ## Command List
