@@ -32,7 +32,8 @@ npm install
 - Johnny-Five: A good understanding of http://johnny-five.io/ is highly recommended for additional extensions. They have created a very user friendly and simple API. API documentation here: https://github.com/rwaldron/johnny-five
 
 
-## Ardunio Set Up (excerpt from the very helpful http://node-ardx.org/)
+## Ardunio Set Up 
+###### excerpt from the very helpful http://node-ardx.org/
 
 Johnny-Five is one of the corner stones of the functionality and uses a protocol called Firmata to communicate over USB to the microcontroller.
 
