@@ -1,7 +1,9 @@
 
-Jarvis is a voice and motion activated home automation platform. It provides developers with everything from: automating lights and doors, to welcoming users home with the news of the day and their favourite song on Spotify.
+Jarvis is a voice and motion activated home automation platform. It provides developers with everything from: automating lights and doors, to welcoming users home with the news and their favourite song on Spotify.
 
-Additionally, Jarvis is built in a modular fashion, allowing additional functionality to constantly be added, as long as data can be transmitted through shared sockets. An example of an extension can be found here: [Jarvis Extension](https://github.com/vanguard12/Jarvis-RaspberryPiExtention)
+Jarvis is built in a modular fashion, allowing additional functionality to constantly be added, as long as data can be transmitted through shared sockets. 
+
+An example of an extension can be found here: [Jarvis Extension](https://github.com/vanguard12/Jarvis-RaspberryPiExtention)
 
 ## Getting Started
 
