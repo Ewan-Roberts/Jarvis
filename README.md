@@ -210,7 +210,7 @@ Takes a BOOL statement and turns on/off your screen
 Takes the number of minutes, creates a timer on the front end and tells the user when the timer is complete
 
 ```
-'reload' or refresh
+'reload' or 'refresh'
 ```
 Reloads current page
 
