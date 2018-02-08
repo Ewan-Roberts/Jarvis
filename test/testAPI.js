@@ -12,7 +12,7 @@ const chai = require('chai'),
 
 // const api = require('../modules/api.js');
 
-describe('API calls', function() {
+xdescribe('API calls', function() {
   
     describe('#fetchNewsData()', function() {
       

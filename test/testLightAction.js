@@ -2,11 +2,13 @@
 
 const rewire = require("rewire");
 
-let lightAction = rewire('../modules/lightAction.js');  
+let lightAction = rewire('../modules/lightAction.js');
 
-let five = require("johnny-five");
+let storage = rewire('../node_modules/node-persist');  
 
-const board = new five.Board();
+// let five = require("johnny-five");
+
+// const board = new five.Board();
 
 const chai = require('chai'),
 
@@ -16,8 +18,44 @@ const chai = require('chai'),
 
     should = chai.should;
 
-// let private_theLightIs = lightAction.__get__("theLightIs");
+let private_foo = lightAction.__get__("foo");
 
+storage.init()
+
+describe('A function to abstrct to store the light state on disk', () => {
+
+    describe("#foo()", () => {
+
+        let fakeLight = {};
+        fakeLight.pin = 11;
+        fakeLight.position = 22;
+        fakeLight.range = [1,30];
+
+        it("Should save the state of the light", () => {
+            
+            var stringed = (fakeLight.pin).toString()
+            console.log("before the change")
+            var bar = storage.getItem(stringed, (err,value)=>{
+                console.log(value)
+            })
+
+            storage.setItem(stringed,fakeLight.position)
+            console.log("after the change")
+            var bar = storage.getItem(stringed, (err,value)=>{
+                console.log(value)
+            })
+
+            console.log(bar)
+
+            console.log(bar.value)
+
+        })
+
+
+
+    })
+
+})
 
 // let private_bedroomLightRelay = lightAction.__get__("checkSum");
 
@@ -67,9 +105,7 @@ xdescribe('A function to abstrct the flipping of lights', () => {
 
         it('Should return an error if the light is not in the ranges values', () => {
 
-            fakeLight.value = 2;
 
-            expect(private_theLightIs(fakeLight,false)).to.be.an('error')
 
 
         });
@@ -79,7 +115,7 @@ xdescribe('A function to abstrct the flipping of lights', () => {
 
     xdescribe('#lightAction()', function() {
         
-        this.timeout(8000)
+        // this.timeout(8000)
 
             xit("Should shen true is passed, open the relay, turn to the maximum then turn of the relay after 300ms ", done => {
                 

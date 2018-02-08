@@ -1,55 +1,26 @@
 "use strict";
 
-const client  = require('socket.io-client')('http://192.168.1.101:3013')
-const event = require('./event.js');
+const user = require("./userInformation"),
+	client  = require("socket.io-client")("http://192.168.1.103:" + user.port),
+	event = require("./event.js"),
+	storage = require("node-persist");
 
 // Set up the connection with the raspberry pi 
-setInterval(()=>{
-	// console.log('throwing')
-	// client.emit('fromJarvis', "hi")
-	// client.on('test2', word => {
-	// 	console.log(word)
-	// })
+event.on("corridorLight", bool => {client.emit("corridorLight", bool)})
 
-	// client.on('testpoo', word => {
-	// 	console.log(word)
-	// })
-}, 2000)
+client.on("circleButton", () => {event.emit("bedroomLightFlip")}) 
 
-event.on("corridorLight", bool => {
+client.on("squareButton", () => {console.log('square Button'); event.emit("bathroomLightFlip")})
 
-	client.emit('corridorLight', bool)	
+client.on("corridorMotion", () => {event.emit("corridorMotion")});
 
-})
-
-
-
-setTimeout(()=>{
-	console.log(client)
-	console.log('hit for true light');
-	client.emit('corridorLight', true)
-},6000)
-
-setTimeout(()=>{
-	console.log(client.connected)
-	console.log('hit for true light');
-	client.emit('corridorLight', false)
-},12000)
-
-// client.on('fromPi', word => {
-// 		console.log(word)
-// 	})
-
-// client.emit('fromJarvis', "hi")
-
-client.on("circleButton", () => {
-
-    event.emit("bedroomLight",true)
-
-}) 
-
-client.on("squareButton", () => { 
-
-    event.emit("bedroomLight",false)
+// Check if a connection with the pi module is set up, fire erorr if not
+event.once("checkPiStatus", () => {
+	console.log('firing pi status hopefully once')
+	if(!client.connected) {
+		
+		event.emit("error", "piServer not connected, consider setting it up here https://github.com/vanguard12/Jarvis-RaspberryPiExtention set up hallway server")
+	
+	}
 
 })

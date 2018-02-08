@@ -11,7 +11,7 @@ const five = require("johnny-five");
 
 const board = new five.Board();
 
-describe('this is the bedroom/bathroom lights functions', () => {
+xdescribe('this is the bedroom/bathroom lights functions', () => {
     
     describe('#bathroomLightOn()', function()  {
         this.timeout(8000)

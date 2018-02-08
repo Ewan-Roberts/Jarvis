@@ -1,42 +1,37 @@
 "use strict";
 
-const spotify = require('spotify-node-applescript'),
-    fetchWeatherData = require('./fetchWeatherData.js'),
-    event = require('./event.js');
+const spotify = require("spotify-node-applescript"),
+    user = require("./userInformation"),
+    event = require("./event.js");
 
+// the below fires on conditions in timer.js
 event.on("morning", () => {
+    console.log("hit on morning")
+    event.emit("checkStatus");
 
-    event.emit('checkStatus');
+    spotify.playTrack(user.morningTrack);
 
-    event.emit('musicControls','half');
+    event.emit("musicControls","half");
 
-    spotify.playTrack('spotify:track:0eHymWFSXpFrD2FqFfvlZw');
+    event.emit("musicControls","play");
 
+    // give the user some time to wake up before you start turning on lights and telling the news 
     setTimeout(() => {
-        
-        event.emit('bedroomLight',true);
-        event.emit('bathroomLight',true);
-        event.emit('corridorLight',true);
 
         spotify.getState((err, obj) => {
             
             //If the user has paused the music, stop the process
             if(obj.state === "playing") {
+                // it is morning
+                event.emit("fetchWeatherData")
+
+                event.emit("musicControls","low");
                 
-                fetchWeatherData(data => {
-                       
-                    data.morning = true;
-        
-                    event.emit('weather', data);
-
-                });
-
-                event.emit('musicControls','pause');
-            
             }
 
         });
 
-    }, 19000);
+    }, user.morningWaitTillMusic);
 
 })
+

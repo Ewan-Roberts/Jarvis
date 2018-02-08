@@ -1,21 +1,20 @@
 "use strict";
 
 const five = require("johnny-five"),
-	board = new five.Board();
+	board = new five.Board(),
+	event = require("./event.js");
 
+//Set up the modules on the ardino board and sets up events.on
 board.on("ready", () => {
 
-    //Set up the modules on the ardino board and sets up events.on
-    const bedroomLight = require('./bedroomLight.js')
+    const bedroomLightLeft = require("./bedroomLeft.js")
 
-    const bathroomLight = require('./bathroomLight.js')
+    const bedroomLightRight = require("./bedroomRight.js")
 
-    const bedroomMotion = require('./bedroomMotion.js')
+    const bathroomLightServo = require("./bathroomLightServo.js")
+
+    const bedroomMotion = require("./bedroomMotion.js")
     
 })
 
-board.on("error", function(err) {
-    
-    throw new Error("There was an error " + err);   
-                                   
-}); 
+board.on("error", err => {event.emit("error", new Error("boardSetUp: " + err))}); 

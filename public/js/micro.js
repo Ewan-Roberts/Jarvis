@@ -6,72 +6,35 @@ jQuery(document).ready($ =>{
 
     setUpMicrophone();
 
-    // socket.emit('screen', false)
-
-    // socket.emit('weather')
-
-    // socket.emit('spanish')
-
-    // socket.emit('wikiQuery', 'term')
-
-    // socket.emit('news');
-
-    socket.emit("bedroom",true)
-
     socket.emit('trackTime');
 
-    socket.on('spotifyTrackInfo', res => {
-        if(res === null) {
-            console.log('no track defined');
-        } else {
-            $('.musicName').text(res.artist + " - " + res.name );    
-        }
-        
+    socket.on('spotifyTrackInfo', res => {if(!res === null) {$('.musicName').text(res.artist + " - " + res.name )}});
 
-    });
-
-    socket.on('trackTimeInfo', res => {
-
-        $('.timing').animate({"width" : res.position}, 200)
-
-    });
+    socket.on('trackTimeInfo', res => {if(!res === null) {$('.timing').animate({"width" : res.position}, 200)}});
 
     socket.on('speechFromBackEnd', data => {
+        
+        if(data !== null){
+            
+            responsiveVoice.speak(data, "UK English Male", {rate: 0.8})    
 
-        responsiveVoice.speak(data, "UK English Male", {rate: 0.8})
-
+        }
+        
     })
 
     socket.on('speechFromBackEndSpanish', data => {
         
         responsiveVoice.speak(data.english, "UK English Male", {rate: 0.8, onend: function() {
 
-            responsiveVoice.speak(data.spanish, 'Spanish Female', {rate: 0.7})
+            responsiveVoice.speak(data.spanish, 'Spanish Female', {rate: 0.9, onend: function() {
+                
+                socket.emit("spanishCompleteMorning")
+
+            }})
 
         }})
 
     })
-
-
-    socket.on('weather', res => {
-        
-        $(".weatherTab").fadeIn();
-
-        if(res.morning) {
-
-            responsiveVoice.speak("Good morning Ewan. Today is " + moment().format('dddd') + " and todays weather will be, " + res.list[0].weather[0].description + " and the temperature is. " + (res.list[0].temp.day).toString(), "UK English Male", {rate: 0.8, onend: () => {
-
-                socket.emit("weatherCompleteMorning")
-
-            }});       
-
-        } else {
-                
-            responsiveVoice.speak("todays weather status is, " + res.list[0].weather[0].description + " and the temperature will be. " + (res.list[0].temp.day).toString(), "UK English Male", {rate: 0.8}); 
-
-        }
-
-    }); 
 
     socket.on('refreshBrowser', () => {
 
@@ -79,31 +42,11 @@ jQuery(document).ready($ =>{
 
     })
 
-    socket.on("wikiResult", res => {
+    socket.on("wikiResult", res => {responsiveVoice.speak(res, "UK English Male", {rate: 0.9})})
 
-        responsiveVoice.speak(res, "UK English Male", {rate: 0.9})
+    $('.musicPrevious').click(() => {socket.emit('musicControls', 'back');});
 
-    })
-
-    socket.on('pi', response => {
-
-        console.log(response);
-
-    });
-
-    $('.musicPrevious').click(() => {
-
-        socket.emit('musicControls', 'back');
-
-    });
-
-
-    $('.musicNext').click(() => {
-
-        socket.emit('musicControls', 'next');
-        
-    });
-
+    $('.musicNext').click(() => {socket.emit('musicControls', 'next');});
 
     $('.musicState').click(() =>{
 

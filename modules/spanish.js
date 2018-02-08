@@ -1,9 +1,8 @@
 
-'use strict';
+"use strict";
 
-const event = require('./event');
-
-const fs = require('fs');
+const event = require("./event"),
+	fs = require("fs");
 
 // Loads the JSON file on disk
 const spanishWords = require("../spanishWords.json");
@@ -11,7 +10,7 @@ const spanishWords = require("../spanishWords.json");
 //Reads the current word the user is up to in the array
 const readIncrement = new Promise((resolve,reject) => {
 
-	fs.readFile('./globalStates.json', 'utf8', (err,data) => {
+	fs.readFile("./globalStates.json", "utf8", (err,data) => {
                 
         if (err) return console.log(err);
 
@@ -26,14 +25,16 @@ const readIncrement = new Promise((resolve,reject) => {
 //Increments the spanish word and resets if the end of the array is hit
 const writeIncrement = obj => {
 
-	if (typeof obj != 'object') return false
-
-    obj[0].counter += 18;
+	if(obj[0].counter > 11466) {
+		obj[0].counter = 0;
+	} else {
+		obj[0].counter += 18;
+	}
 
     obj = JSON.stringify(obj);
 
- 	fs.writeFile('./globalStates.json', obj, err => {if (err) throw err});
-
+ 	fs.writeFile("./globalStates.json", obj, err => {if (err) throw err});
+ 	
 }
 
 // Stip out the object and construct a string that can be sent to the front end as the word of the day
@@ -46,9 +47,9 @@ const stripSpanishWords = obj => {
 	
 	let infinativeSpanish = " la palabra en Infinativo es: " + obj.infinitive + ", otro vez,.  " + obj.infinitive ;
 	
-	let tense = "., Ahora, estamos aprendiendo el tense,. " + obj.tense;
+	let tense = "., Ahora, estamos aprendiendo la forma,. " + obj.tense;
 	
-	let forms = "., las formas son : yo " + obj.form_1s + ", tu " + obj.form_2s + ", ello " + obj.form_3s + ", Nosotros " + obj.form_1p + ", Ellos " + obj.form_3p + ", tengas un buen dia mi amor, si te veo con isabella voy a matarte ok?";
+	let forms = "., las formas son : yo " + obj.form_1s + ", tu " + obj.form_2s + ", el " + obj.form_3s + ", Nosotros " + obj.form_1p + ", Ellos " + obj.form_3p + ", Te dije que si te veía con isaballa te mataría... te veo ok?";
 
 	schema.english = "The Spanish word of the day is " + obj.infinitive_english
 
@@ -58,32 +59,31 @@ const stripSpanishWords = obj => {
 
 };
 
-// Strips out the word and resolve to it so it can be passed 
-const getSpanishWord = new Promise((resolve,reject) => {
-
+// Bind the event globally and send it to the front end
+event.on("spanish", () => {
+	
 	readIncrement.then(obj => {
 
 		let i = obj[0].counter
 
-		if(i >= 11466) {
-			i = 0;
-		}
-
-		resolve(stripSpanishWords(spanishWords[i]))
-
 		writeIncrement(obj)
 
-	})
-
-});
-
-// Bind the event globally and send it to the front end
-event.on("spanish", () => {
-
-	getSpanishWord.then(str => {
-		
-		event.emit("speechFromBackEndSpanish", str)
+		event.emit("speechFromBackEndSpanish", stripSpanishWords(spanishWords[i]))
 
 	})
 
 });
+
+event.on("spanishCompleteMorning", () => {
+
+    setTimeout(() => {
+
+        event.emit("musicControls","pause");
+        
+    }, 100000);
+
+});
+
+
+
+

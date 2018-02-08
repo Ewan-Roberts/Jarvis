@@ -1,44 +1,33 @@
 "use strict";
 
 const five = require("johnny-five"),
-    moment = require('moment'),
-    event = require('./event.js'),
-    timer = require('./timer.js'),
-    computer = require('./computer.js')
+    event = require("./event.js"),
+    isItDaytime = require("./isItDaytime.js")
 
 // Set up the johnny five modules, these are loaded when boardSetUp is called
-let bedroomSensor = new five.Motion({
-    
-    pin: 22,
-    freq: 200,
-    calibrationDelay: 50
+const bedroomSensor = new five.Motion(22);
 
-});
-
-let hallwaySensor = new five.Motion({
-    
-    pin: 23,
-    freq: 200,
-    calibrationDelay: 50
-
-});
+const hallwaySensor = new five.Motion(23);
 
 const motionStart = () => {
 
-    //If this monday to Friday welcome the user home
-    if (moment().isoWeekday() <= 7 && timer.checkTimeSinceLastMovementSince(Date.now()) && computer.isItDaytime()) {
-        
+    if(isItDaytime()) {
+
         event.emit("welcomeHome");
 
         event.emit("bedroomLight", true);
 
+        event.emit("corridorLight", true);
+
     }
+
     event.emit("resetMovementTimer");
 
 }
 
-bedroomSensor.on("motionstart", () => {motionStart()}); 
+// all below fire when the sensors see motion 
+bedroomSensor.on("motionstart", () => {event.emit("motion",motionStart)}); 
 
-hallwaySensor.on("motionstart", () => {motionStart()}); 
+hallwaySensor.on("motionstart", () => {event.emit("motion",motionStart)}); 
 
-event.on("corridorMotion", () => {motionStart()});
+event.on("corridorMotion", () => {event.emit("motion",motionStart)}); 

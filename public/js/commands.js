@@ -103,13 +103,13 @@ let commands = {
         timer.resume()
 
     },
-
+    //DONE
     'screen *action': action => { 
 
         socket.emit('screen', action)
 
     },
-
+    
     'reload': () => {
 
         window.location.reload()
@@ -124,30 +124,45 @@ let commands = {
 
     'bedroom *action': action => { 
         
-        socket.emit('bedroom', action)    
+        socket.emit('bedroomLight', action)    
         
     },
+    'cargo': () => { 
 
+        socket.emit('bedroomLightToggle')
+    },
+    'Argo': () => { 
+
+        socket.emit('bedroomLightToggle')
+    },
+    'Cargill': () => { 
+
+        socket.emit('bedroomLightToggle')
+    },
+    'Argos': () => { 
+
+        socket.emit('bedroomLightToggle')
+    },
     'toggle': () => { 
 
-        socket.emit('bedroomToggle')
+        socket.emit('bedroomLightToggle')
     },
 
     'bathroom *action': action => { 
     
-        socket.emit('bathroom', action)
+        socket.emit('bathroomLight', action)
 
     },
 
     'lights *action': action => { 
         
-        socket.emit('lights', action)
+        socket.emit('allLights', action)
 
     },
 
     'what is the weather': () => { 
         
-        socket.emit('weather')
+        socket.emit('fetchWeatherData')
 
     },
 
@@ -179,7 +194,7 @@ let commands = {
 
     'open *application' : application => {
 
-        socket.emit('browserControls', application)
+        socket.emit('openApplication', application)
         
     },
 
@@ -364,7 +379,7 @@ let commands = {
 
     'what is the news' : () => {
 
-        socket.emit('news');
+        socket.emit('fetchNewsData');
 
     }
 

@@ -1,68 +1,49 @@
 "use strict";
 
 let five = require("johnny-five"),
-    computer = require('./computer.js'),
-    light = require('./lightAction.js'),
-    event = require('./event.js');
-
-// Set up the johnny five modules, these are loaded when boardSetUp is called
-let leftLightRelay = new five.Relay({
-    
-    pin: 9,
-    type: "NC"
-
-});
-
-let rightLightRelay = new five.Relay({
-    
-    pin: 24,
-    type: "NC"
-
-});
-
-let rightLight = new five.Servo({
-    
-    pin: 6,
-    range: [0,70]
-
-});
-
-let leftLight = new five.Servo({
-    
-    pin: 8,
-    range: [70,175]
-
-});
-
-let hallSwitchSynced = true;
-
-let lastAction = true;
-
-//Start the lights without power to remove buzzing from servos
-rightLightRelay.open();
-leftLightRelay.open();
+    digest = require("./digest.js"),
+    light = require("./lightAction.js"),
+    flip = require("./lightFlip"),
+    event = require("./event.js"),
+    storage = require("node-persist");
+    //TODO?
+    storage.init()
 
 //Pass the functionality to a global event handler 
 event.on("bedroomLight", cmd => {
     
-    let bool = computer.digest(cmd)
-    light(bool,leftLight,leftLightRelay);
-    
-    if(hallSwitchSynced){
-        light(bool,rightLight,rightLightRelay);
-    } else {
-        light(!bool,rightLight,rightLightRelay);
-    }
+    //Digest the bool that match to key words in the digest.js file
+    let bool = digest(cmd)
 
-    // computer.screenWake();
+    event.emit("bedroomLeft",bool);
+    
+    //Get from local storage if the right light is synced
+    storage.getItem("lightSynced", (err,stored) => {
+        
+        stored?event.emit("bedroomRight",bool):event.emit("bedroomRight",!bool);
+
+    })
+    
+    storage.setItem("bedroomLight",bool);
+    
+    // event.emit("screen",bool)
 
 });
 
+event.on("bedroomLightFlip", () => {flip("bedroomLight")});
+
 event.on("bedroomLightToggle", () => {
 
-    hallSwitchSynced = !hallSwitchSynced;
+    storage.getItem("lightSynced", (err,bool) => {
+        
+        storage.setItem("lightSynced",!bool);
 
-    event.emit("bedroomLight", lastAction)
+        storage.getItem("bedroomLight", (err,bool) => {
+            
+            event.emit("bedroomLight", bool)
 
+        })
+
+    })
 
 });
