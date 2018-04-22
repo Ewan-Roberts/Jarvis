@@ -1,9 +1,9 @@
 "use strict";
 
 const 	request = require("request"),
-		user 	= require("./userInformation"),
+		user 	= require("../userInformation"),
 		moment 	= require("moment"),
-		event 	= require("./event");
+		event 	= require("../event");
 
 // Pulls from userInformation file
 event.on("fetchWeatherData", () => {

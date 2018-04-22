@@ -2,7 +2,7 @@
 
 const   cheerio = require('cheerio'),
         request = require('request'),
-        event   = require('./event');
+        event   = require('../event');
 
 // Need to use the wikipedia API for this, all of this is quite junk code
 event.on("wikiQuery",res => {

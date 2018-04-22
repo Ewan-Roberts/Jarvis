@@ -2,8 +2,8 @@
 
 const   spotify     = require("spotify-node-applescript"),
         childProc   = require("child_process"),
-        event       = require("./event"),
-        user        = require("./userInformation");
+        event       = require("../event"),
+        user        = require("../userInformation");
 
 event.on("musicControls", res => {
 

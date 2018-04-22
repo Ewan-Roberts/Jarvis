@@ -2,8 +2,8 @@
 
 const   request = require("request"),
         moment  = require("moment"),
-        user    = require("./userInformation"),
-        event   = require("./event");
+        user    = require("../userInformation"),
+        event   = require("../event");
 
 // Pulls from userInformation file
 event.on("fetchNewsData", () => {

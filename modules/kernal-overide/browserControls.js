@@ -1,10 +1,10 @@
 "use strict";
 
 const childProc = require("child_process"),
-    event = require("./event"),
+    event = require("../event"),
     spotify = require("spotify-node-applescript"),
-    digest = require("./digest"),
-    user = require("./userInformation");
+    digest = require("../digest"),
+    user = require("../userInformation");
 
 event.on("openApplication", res => {
 
