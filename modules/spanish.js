@@ -1,11 +1,12 @@
 
 "use strict";
 
-const 	event 	= require("./event"),
-		fs 		= require("fs"),
-		// Loads the JSON file on disk
-		spanishWords = require("../spanishWords.json"),
-		storage = require("node-persist");
+const	event	= require("./event"),
+	fs 	= require("fs"),
+	
+      	// Loads the JSON file on disk
+	spanishWords = require("../spanishWords.json"),
+	storage = require("node-persist");
 
 //Reads the current word the user is up to in the array
 const readIncrement = new Promise((resolve,reject) => {
@@ -22,26 +23,8 @@ const readIncrement = new Promise((resolve,reject) => {
 
 })
 
-//Increments the spanish word and resets if the end of the array is hit
-const writeIncrement = obj => {
-
-	if(obj[0].counter > 11466) {
-
-		obj[0].counter = 0;
-
-	} else {
-
-		obj[0].counter += 18;
-
-	}
-
-    obj = JSON.stringify(obj);
-
- 	fs.writeFile("./globalStates.json", obj, err => {if (err) throw err});
- 	
-}
-
 // Stip out the object and construct a string that can be sent to the front end as the word of the day
+//I know this is a little rough but they are just hard to read
 const stripSpanishWords = obj => {
 
 	let schema = {
@@ -68,18 +51,14 @@ event.on("spanish", () => {
 
 	console.log("start spanish")
 	
-	readIncrement.then(obj => {
+		readIncrement.then(obj => {
 
 		storage.getItem("spanishCounter", (err,stored) => {
 
-        	event.emit("speechFromBackEndSpanish", stripSpanishWords(spanishWords[stored]))
+			event.emit("speechFromBackEndSpanish", stripSpanishWords(spanishWords[stored]))
 
-        	storage.setItem("spanishCounter",(stored += 18));
+			storage.setItem("spanishCounter",(stored += 18));
 
-    	})
+		})
 	})
 });
-
-
-
-
