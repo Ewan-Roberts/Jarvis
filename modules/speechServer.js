@@ -25,9 +25,9 @@ app.get("/", (req, res) => {res.sendfile("index.html", {"root": "../speech/publi
 const options = {
 
 	key: fs.readFileSync("./localhost.key"),
-    cert: fs.readFileSync("./localhost.cert"),
-    requestCert: false,
-    rejectUnauthorized: false
+    	cert: fs.readFileSync("./localhost.cert"),
+	requestCert: false,
+    	rejectUnauthorized: false
 
 };
 
