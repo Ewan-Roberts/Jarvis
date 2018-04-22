@@ -1,12 +1,14 @@
 "use strict";
 
-const spotify = require("spotify-node-applescript"),
-    user = require("./userInformation"),
-    event = require("./event.js");
+const   spotify = require("spotify-node-applescript"),
+        user    = require("./userInformation"),
+        event   = require("./event");
 
 // the below fires on conditions in timer.js
 event.on("morning", () => {
-    console.log("hit on morning")
+
+    console.log("start morning")
+
     event.emit("checkStatus");
 
     spotify.playTrack(user.morningTrack);
@@ -17,21 +19,21 @@ event.on("morning", () => {
 
     // give the user some time to wake up before you start turning on lights and telling the news 
     setTimeout(() => {
+                        
+        event.emit("fetchWeatherData")
 
-        spotify.getState((err, obj) => {
-            
-            //If the user has paused the music, stop the process
-            if(obj.state === "playing") {
-                // it is morning
-                event.emit("fetchWeatherData")
+    }, 48000);
 
-                event.emit("musicControls","low");
-                
-            }
+    setTimeout(() => {
+             
+        event.emit("fetchNewsData")
 
-        });
+    }, 60000);
 
-    }, user.morningWaitTillMusic);
+    setTimeout(() => {
+             
+        event.emit("spanish")
 
+    }, 140000);
 })
 

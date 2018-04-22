@@ -1,11 +1,11 @@
 
 "use strict";
 
-const event = require("./event"),
-	fs = require("fs");
-
-// Loads the JSON file on disk
-const spanishWords = require("../spanishWords.json");
+const 	event 	= require("./event"),
+		fs 		= require("fs"),
+		// Loads the JSON file on disk
+		spanishWords = require("../spanishWords.json"),
+		storage = require("node-persist");
 
 //Reads the current word the user is up to in the array
 const readIncrement = new Promise((resolve,reject) => {
@@ -14,7 +14,7 @@ const readIncrement = new Promise((resolve,reject) => {
                 
         if (err) return console.log(err);
 
-        let obj = JSON.parse(data)
+        const obj = JSON.parse(data)
 
 		resolve(obj)
 
@@ -26,9 +26,13 @@ const readIncrement = new Promise((resolve,reject) => {
 const writeIncrement = obj => {
 
 	if(obj[0].counter > 11466) {
+
 		obj[0].counter = 0;
+
 	} else {
+
 		obj[0].counter += 18;
+
 	}
 
     obj = JSON.stringify(obj);
@@ -61,27 +65,19 @@ const stripSpanishWords = obj => {
 
 // Bind the event globally and send it to the front end
 event.on("spanish", () => {
+
+	console.log("start spanish")
 	
 	readIncrement.then(obj => {
 
-		let i = obj[0].counter
+		storage.getItem("spanishCounter", (err,stored) => {
 
-		writeIncrement(obj)
+        	event.emit("speechFromBackEndSpanish", stripSpanishWords(spanishWords[stored]))
 
-		event.emit("speechFromBackEndSpanish", stripSpanishWords(spanishWords[i]))
+        	storage.setItem("spanishCounter",(stored += 18));
 
+    	})
 	})
-
-});
-
-event.on("spanishCompleteMorning", () => {
-
-    setTimeout(() => {
-
-        event.emit("musicControls","pause");
-        
-    }, 100000);
-
 });
 
 

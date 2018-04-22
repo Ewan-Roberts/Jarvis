@@ -1,19 +1,13 @@
 "use strict";
 
-app.directive('appNews', () => { 
+app.directive("appNews", () => { 
 
-  return { 
-
-    restrict: 'E', 
-
-    scope: { 
-
-      info: '=' 
-
-    },
-
-    templateUrl: 'js/directives/news.html' 
-
-  };
+	return { 
+		restrict: "E", 
+		scope: { 
+		  info: "=" 
+		},
+		templateUrl: "js/directives/news.html" 
+	};
 
 });

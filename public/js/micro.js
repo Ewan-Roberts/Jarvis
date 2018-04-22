@@ -4,31 +4,23 @@ const socket = io();
 
 jQuery(document).ready($ =>{
 
-    setUpMicrophone();
+    // setUpMicrophone();
 
-    socket.emit('trackTime');
+    socket.on("spotifyTrackInfo", res => {if(res) {$(".musicName").text(res.artist + " - " + res.name )}});
 
-    socket.on('spotifyTrackInfo', res => {if(!res === null) {$('.musicName').text(res.artist + " - " + res.name )}});
+    socket.on("trackTimeInfo", res => {if(res) {$(".timing").animate({"width" : res.position}, 200)}});
 
-    socket.on('trackTimeInfo', res => {if(!res === null) {$('.timing').animate({"width" : res.position}, 200)}});
+    socket.on("speechFromBackEnd", res => {if(res){responsiveVoice.speak(res, "UK English Male", {rate: 0.8})}})
 
-    socket.on('speechFromBackEnd', data => {
-        
-        if(data !== null){
-            
-            responsiveVoice.speak(data, "UK English Male", {rate: 0.8})    
-
-        }
-        
-    })
-
-    socket.on('speechFromBackEndSpanish', data => {
+    socket.on("speechFromBackEndSpanish", data => {
         
         responsiveVoice.speak(data.english, "UK English Male", {rate: 0.8, onend: function() {
 
-            responsiveVoice.speak(data.spanish, 'Spanish Female', {rate: 0.9, onend: function() {
+            responsiveVoice.speak(data.spanish, "Spanish Female", {rate: 0.9, onend: function() {
+
+                $(".leftTab").fadeOut("slow") 
                 
-                socket.emit("spanishCompleteMorning")
+                $(".weatherTab").fadeOut("slow")
 
             }})
 
@@ -36,35 +28,68 @@ jQuery(document).ready($ =>{
 
     })
 
-    socket.on('refreshBrowser', () => {
-
-        window.location.reload()
-
-    })
+    socket.on("refreshBrowser", () => {window.location.reload()})
 
     socket.on("wikiResult", res => {responsiveVoice.speak(res, "UK English Male", {rate: 0.9})})
 
-    $('.musicPrevious').click(() => {socket.emit('musicControls', 'back');});
+    $(".musicPrevious").click(() => {socket.emit("musicControls", "back");});
 
-    $('.musicNext').click(() => {socket.emit('musicControls', 'next');});
+    //This is just for rough testing 
+    $(".inputTime").keyup(function() {
+        var value = $( this ).val();
+        
+        if(value === "toggle"){
+            socket.emit("bedroomLightToggle")
+        }
 
-    $('.musicState').click(() =>{
+        if(value === "bathroom on"){
+            socket.emit("bathroomLight", true)
+        }
+        
+        if(value === "bathroom off"){
+            socket.emit("bathroomLight", false)
+        }
+        if(value === "bedroom on"){
+            socket.emit("bedroomLight", true)
+        }
+        if(value === "bedroom off"){
+            socket.emit("bedroomLight", false)
+        }
+        if(value === "weather"){
+            socket.emit("fetchWeatherData")
+        } 
+        if(value === "news"){
+            socket.emit("fetchNewsData")
+        } 
+        if(value === "override"){
+            socket.emit("override",true)
+        }       
+        if(value === "morning"){
+            socket.emit("morning")
+        }   
+        console.log(value)
 
-        if ($('.musicState').text() === "ll"){
+    }).keyup();
 
-            $('.musicState').text(">");
+    $(".musicNext").click(() => {socket.emit("musicControls", "next");});
 
-            $('.musicState').css({"background-color": "green"});
+    $(".musicState").click(() =>{
 
-            socket.emit('musicControls', 'pause');
+        if ($(".musicState").text() === "ll"){
+
+            $(".musicState").text(">");
+
+            $(".musicState").css({"background-color": "green"});
+
+            socket.emit("musicControls", "pause");
 
         } else{
 
-            $('.musicState').text("ll");
+            $(".musicState").text("ll");
 
-            $('.musicState').css({"background-color": "red"});
+            $(".musicState").css({"background-color": "red"});
 
-            socket.emit('musicControls', 'play');
+            socket.emit("musicControls", "play");
 
         }
         
@@ -72,21 +97,15 @@ jQuery(document).ready($ =>{
 
     if (annyang) {
 
-        annyang.start();
+        annyang.start()
 
-        annyang.setLanguage('en-GB');
+        annyang.setLanguage("en-GB");
 
-        annyang.addCallback('result', userSaid => {
-            
-            console.log(userSaid)
+        annyang.addCallback("result", userSaid => {
 
             $(".voiceMatch").empty()
 
-            for (var i = 0; i < userSaid.length; i++) {
-                
-                $(".voiceMatch").append('<div>' + userSaid[i] +'</div>');
-
-            }
+            userSaid.forEach(word => {$(".voiceMatch").append("<div>" + word +"</div>")})
 
         });
 
@@ -94,10 +113,6 @@ jQuery(document).ready($ =>{
         
     }
 
-    setInterval(()=>{
-
-       $('.currentTime').html(moment().format('DD MMMM YYYY H:mm:ss')); 
-       
-    }, 1000);
+    setInterval(()=>{$(".currentTime").html(moment().format("DD MMMM YYYY H:mm:ss"))}, 1000);
 
 });

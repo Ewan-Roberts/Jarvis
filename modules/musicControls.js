@@ -1,43 +1,35 @@
 "use strict";
 
-const spotify = require("spotify-node-applescript"),
-    childProc = require("child_process"),
-    event = require("./event.js"),
-    user = require("./userInformation.js");
+const   spotify     = require("spotify-node-applescript"),
+        childProc   = require("child_process"),
+        event       = require("./event"),
+        user        = require("./userInformation");
 
 event.on("musicControls", res => {
 
     switch(res) {
                 
-        case "next":
-            spotify.next();
+        case "next":spotify.next();
             break;
 
-        case "play":
-            spotify.play();
+        case "back":spotify.previous();
             break;
 
-        case "pause":
-            spotify.pause();
+        case "play":spotify.play();
             break;
 
-        case "back":
-            spotify.previous();
+        case "pause":spotify.pause();
             break;
 
         case "up":
 
             childProc.exec("osascript -e 'set Volume 6'");
             
-            spotify.getState((err, obj) => {
+            spotify.getState(obj => {
+                if (obj === null){return}
+                const volume = obj.state;
 
-                let state = obj.state;
-
-                if(state <= 80) {
-                    
-                    spotify.volumeUp();
-
-                }
+                if(volume <= 80) {spotify.volumeUp()}
 
             })
             
@@ -47,42 +39,48 @@ event.on("musicControls", res => {
 
             childProc.exec("osascript -e 'set Volume 6'");
             
-            spotify.getState((err, obj) => {
-
-                let state = obj.state;
-
-                if(state => 20) {
-                    
-                    spotify.volumeDown();
-
-                }
+            spotify.getState(obj => {
+                if (obj === null) {return}
+                const volume = obj.state;
+                
+                if(volume >= 20) {spotify.volumeDown()}
 
             })
 
             break;
 
         case "full":
+
             childProc.exec("osascript -e 'set Volume 10'");
+
             spotify.setVolume(100);
+
             break;
 
         case "half":
-            childProc.exec("osascript -e 'set Volume 2'");
+
+            childProc.exec("osascript -e 'set Volume 3'");
+
             spotify.setVolume(50);
+
             break;
 
         case "low":
+
             childProc.exec("osascript -e 'set Volume 2'");
+
             spotify.setVolume(40);
+
             break;
 
         case "high":
-            childProc.exec("osascript -e 'set Volume 6'");
-            spotify.setVolume(60);
-            break;
 
+            childProc.exec("osascript -e 'set Volume 6'");
+
+            spotify.setVolume(60);
+
+            break;
     }
-    
 })
 
 event.on("playTrack", uri => {
@@ -94,9 +92,7 @@ event.on("playTrack", uri => {
     } else {
 
         spotify.playTrack("spotify:track:" + user.track)
-
     }
-
 })
 
 event.on("playUserPlaylist", () => {spotify.playTrackInContext(user.track, user.spotifyUser+user.spotifyPlaylist)})

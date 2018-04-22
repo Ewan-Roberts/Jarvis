@@ -1,17 +1,13 @@
-app.directive('appInfo', () => { 
+"use strict";
 
-  return { 
+app.directive("appInfo", () => { 
 
-    restrict: 'E', 
-
-    scope: { 
-
-      info: '=' 
-
-    },
-
-    templateUrl: 'js/directives/appInfo.html' 
-
-  };
+	return { 
+		restrict: "E", 
+		scope: { 
+		  info: "=" 
+		},
+		templateUrl: "js/directives/appInfo.html" 
+	};
    
 });

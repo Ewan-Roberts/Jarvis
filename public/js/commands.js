@@ -40,27 +40,25 @@ function Timer (callback, delay) {
 
 let commands = {
 
-    'timer for *mins': mins => { 
-        
-        let milli = mins * 60000
+    "timer for *mins": mins => { 
 
-        let seconds = mins*60
+        let seconds = (mins * 60000)*60
 
-        $('.countdown').slideDown()
+        $(".countdown").slideDown()
 
-        $('.countdown').text(seconds + " seconds")
+        $(".countdown").text(seconds + " seconds")
 
         responsiveVoice.speak("Timer started for " + mins + " minutes", "UK English Male", {rate: 0.9});
 
         timer = new Timer(()=> {
 
-            $('.countdown').text(seconds + " seconds")
+            $(".countdown").text(seconds + " seconds")
 
             seconds -= 1;
 
             if(seconds===0){
 
-                $('.countdown').fadeOut()
+                $(".countdown").fadeOut()
 
                 responsiveVoice.speak("Timer finished", "UK English Male",{rate: 0.9});
 
@@ -72,9 +70,9 @@ let commands = {
 
     },
 
-    'timer reset': () => { 
+    "timer reset": () => { 
 
-        $('.countdown').fadeOut()
+        $(".countdown").fadeOut()
 
         clearInterval(timer)
 
@@ -84,9 +82,9 @@ let commands = {
 
     },
 
-    'timer stop': () => { 
+    "timer stop": () => { 
 
-        $('.countdown').fadeOut()
+        $(".countdown").fadeOut()
 
         responsiveVoice.speak("Timer stopped", "UK English Male", {rate: 0.9});
 
@@ -94,293 +92,181 @@ let commands = {
 
     },
 
-    'timer resume': () => { 
+    "timer resume": () => { 
 
-        $('.countdown').fadeIn()
+        $(".countdown").fadeIn()
 
         responsiveVoice.speak("Timer resummed", "UK English Male", {rate: 0.9});
 
         timer.resume()
 
     },
-    //DONE
-    'screen *action': action => { 
-
-        socket.emit('screen', action)
-
-    },
     
-    'reload': () => {
-
-        window.location.reload()
-
-    },
-
-    'refresh': () => {
-
-        window.location.reload()
-
-    },
-
-    'bedroom *action': action => { 
-        
-        socket.emit('bedroomLight', action)    
-        
-    },
-    'cargo': () => { 
-
-        socket.emit('bedroomLightToggle')
-    },
-    'Argo': () => { 
-
-        socket.emit('bedroomLightToggle')
-    },
-    'Cargill': () => { 
-
-        socket.emit('bedroomLightToggle')
-    },
-    'Argos': () => { 
-
-        socket.emit('bedroomLightToggle')
-    },
-    'toggle': () => { 
-
-        socket.emit('bedroomLightToggle')
-    },
-
-    'bathroom *action': action => { 
+    "screen *action": action => {socket.emit("screen", action)},
     
-        socket.emit('bathroomLight', action)
+    "reload": () => {window.location.reload()},
 
-    },
+    "refresh": () => {window.location.reload()},
 
-    'lights *action': action => { 
-        
-        socket.emit('allLights', action)
+    "bedroom *action": action => {socket.emit("bedroomLight", action)},
+    
+    "cargo": () => {socket.emit("bedroomLightToggle")},
+    
+    "Argo": () => {socket.emit("bedroomLightToggle")},
+    
+    "Cargill": () => {socket.emit("bedroomLightToggle")},
+    
+    "toggle": () => {socket.emit("bedroomLightToggle")},
 
-    },
+    "flip": () => {socket.emit("bedroomLightToggle")},
 
-    'what is the weather': () => { 
-        
-        socket.emit('fetchWeatherData')
+    "coral": () => {socket.emit("bedroomLightToggle")},
 
-    },
+    "bathroom *action": action => {socket.emit("bathroomLight", action)},
 
-    'where does isabella live': () => { 
-        
-        responsiveVoice.speak("Nw1 6dn", "UK English Male",{rate: 0.9});
+    "lights *action": action => {socket.emit("allLights", action)},
 
-    },
+    "what is the news" : () => {socket.emit("fetchNewsData")},
 
-    'spanish word': () => { 
-        
-        socket.emit('spanish')
+    "get the news" : () => {socket.emit("fetchNewsData")},
 
-    },
+    "what is the weather": () => {socket.emit("fetchWeatherData")},
 
-    'what is the time' : () => {
+    "whats the weather": () => {socket.emit("fetchWeatherData")},
 
-        responsiveVoice.speak("Today is; " + moment().format('dddd') + ", and the time is. " + moment().format('HH:mm'), "UK English Male",{rate: 0.9});
+    "get the weather": () => {socket.emit("fetchWeatherData")},
 
-    },
+    "where does isabella live": () => {responsiveVoice.speak("Nw1 6dn", "UK English Male",{rate: 0.9})},
 
-    'stop (stop)' : () => {
+    "spanish word": () => {socket.emit("spanish")},
 
-        socket.emit('musicControls', 'pause')   
+    "what is the time" : () => {responsiveVoice.speak("Today is; " + moment().format("dddd") + ", and the time is. " + moment().format("HH:mm"), "UK English Male",{rate: 0.9});},
 
+    "stop (stop)" : () => {
+        socket.emit("musicControls", "pause");
         responsiveVoice.cancel();
-        
     },
 
-    'open *application' : application => {
+    "open *application" : application => {socket.emit("openApplication", application)},
 
-        socket.emit('openApplication', application)
-        
-    },
-
-    '*application search for *video' : (application,video) => {
+    "*application search for *video" : (application,video) => {
 
         let res = {
-
             vessel: application,
-
             search: video
-
         }
 
-        socket.emit('applicationSearch', res)
+        socket.emit("applicationSearch", res)
         
     },
 
-    'play *user playlist' : user => {
+    "play *user playlist" : user => {socket.emit("playUserPlaylist")},
 
-        socket.emit('playUserPlaylist')
+    "play some (music)" : () => {socket.emit("playTrack", "2jplimH0b7Abf5LQSPx27A")},   
 
-    },
+    "Wikipedia *term": term => {socket.emit("wikiQuery", term)},
 
-    'play some (music)' : () => {
+    "override": () => {console.log('override done'); socket.emit("override",true)},
 
-        socket.emit('playTrack', '2jplimH0b7Abf5LQSPx27A')
-        
-    },
+    "clear": () => { 
 
-    'search for song *name': name => {
-
-        //TODO : all calls should be on the BE
-
-        $.ajax({
-
-            url: 'https://api.spotify.com/v1/search',
-
-            data: {
-                q: name,
-                type: 'track'
-            },
-
-            success: response => {
-
-                socket.emit('playTrack', response.tracks.items[0].id) 
-
-            }
-
-        });
+        $(".leftTab").fadeOut("slow") 
+        $(".weatherTab").fadeOut("slow")
 
     },
 
-    'search for artist *name': name => {
- 
-        $('.artist').remove()
+    "volume up (up)": () => {socket.emit("musicControls", "up")},
 
-        getArtistMatches(name)
+    "volume down (down)": () => {socket.emit("musicControls", "down")},
 
-        annyang.addCommands({
+    "morning": () => {socket.emit("morning")}, 
 
-            '*index': index => {
-                    
-                if(index == (1||"one"||"1"||"first")) {
+    "volume full (full)": () => {socket.emit("musicControls", "full")},
 
-                    getArtistTopTracks($('.overlay')[0].id)
+    "volume half (half)": () => {socket.emit("musicControls", "half")},
 
-                }
+    "pause (pause)": () => {socket.emit("musicControls", "pause")},
 
-                else if (index == (2||"two"||"2"||"second")) {
+    "cheese (cheese)": () => {socket.emit("musicControls", "pause")},    
 
-                    getArtistTopTracks($('.overlay')[1].id)
-                    
-                }
+    "horse (horse)": () => {socket.emit("musicControls", "pause")},
 
-                else if (index == (3||"three"||"3"||"third")) {
+    "play (play)": () => {socket.emit("musicControls", "play")},
 
-                    getArtistTopTracks($('.overlay')[2].id)
-                    
-                }
+    "next (next)": () => {socket.emit("musicControls", "next")},   
 
-            }
-        })
+    "back": () => {
 
-    },     
-
-    'Wikipedia *term': term => {
-
-        socket.emit('wikiQuery', term)
+        socket.emit("musicControls", "back")
+        socket.emit("musicControls", "back")
 
     },
 
-    'override': () => {
+    "bat": () => {
 
-        socket.emit('override')
-
-    },
-
-    'clear': () => { 
-
-        $('.leftTab').fadeOut('slow') 
-        $('.weatherTab').fadeOut('slow')
+        socket.emit("musicControls", "back")
+        socket.emit("musicControls", "back")
 
     },
 
-    'volume up (up)': () => {
+    "thanks Jarvis": () => {responsiveVoice.speak("you are very welcome", "UK English Male", {rate: 0.9})},
 
-        socket.emit('musicControls', 'up')
-        socket.on('setVolume', 6)
-
-    },
-
-    'volume down (down)': () => {
-
-        socket.emit('musicControls', 'down')   
-        socket.on('setVolume', 6)             
-
-    },
-
-    'volume full (full)': () => {
-
-        socket.emit('musicControls', 'full') 
-        socket.on('setVolume', 10)                
-
-    },
-
-    'volume half (half)': () => {
-
-        socket.emit('musicControls', 'half') 
-        socket.on('setVolume', 6)               
-
-    },
-
-    'pause (pause)': () => {
-
-        socket.emit('musicControls', 'pause')                
-
-    },
-
-
-    'cheese (cheese)': () => {
-
-        socket.emit('musicControls', 'pause')                
-
-    },    
-
-    'horse (horse)': () => {
-
-        socket.emit('musicControls', 'pause')                
-
-    },
-
-    'play (play)': () => {
-
-        socket.emit('musicControls', 'play')
-
-    },
-
-    'next (next)': () => {
-
-        socket.emit('musicControls', 'next')
-
-    },   
-
-    'back (back)': () => {
-
-        socket.emit('musicControls', 'back')
-        socket.emit('musicControls', 'back')
-
-    },
-
-    'thanks Jarvis': () => {
-
-        responsiveVoice.speak('you are very welcome', "UK English Male", {rate: 0.9})
-
-    },
-
-    'hi Jarvis': () => {
-
-        responsiveVoice.speak('Hi there how are you today?', "UK English Male", {rate: 0.9})
-
-    },
-
-    'what is the news' : () => {
-
-        socket.emit('fetchNewsData');
-
-    }
-
+    "hi Jarvis": () => {responsiveVoice.speak("Hi there how are you today?", "UK English Male", {rate: 0.9})}
 };
+
+
+    // "search for song *name": name => {
+
+    //     //TODO : all calls should be on the BE
+
+    //     $.ajax({
+
+    //         url: "https://api.spotify.com/v1/search",
+
+    //         data: {
+    //             q: name,
+    //             type: "track"
+    //         },
+
+    //         success: response => {
+
+    //             socket.emit("playTrack", response.tracks.items[0].id) 
+
+    //         }
+
+    //     });
+
+    // },
+
+        // "search for artist *name": name => {
+ 
+    //     $(".artist").remove()
+
+    //     getArtistMatches(name)
+
+    //     annyang.addCommands({
+
+    //         "*index": index => {
+                    
+    //             if(index == (1||"one"||"1"||"first")) {
+
+    //                 getArtistTopTracks($(".overlay")[0].id)
+
+    //             }
+
+    //             else if (index == (2||"two"||"2"||"second")) {
+
+    //                 getArtistTopTracks($(".overlay")[1].id)
+                    
+    //             }
+
+    //             else if (index == (3||"three"||"3"||"third")) {
+
+    //                 getArtistTopTracks($(".overlay")[2].id)
+                    
+    //             }
+
+    //         }
+    //     })
+
+    // },  

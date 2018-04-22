@@ -1,12 +1,12 @@
 
 // server set up
-const app = require("express")(),
-	express = require("express"),
-	https = require("https"),
-	path = require("path"),
-	fs = require("fs"),
-	event = require("./event"),
-	user = require("./userInformation");
+const   app     = require("express")(),
+        express = require("express"),
+        https   = require("https"),
+        path    = require("path"),
+        fs      = require("fs"),
+        event   = require("./event"),
+        user    = require("./userInformation");
 
 app.use(express.bodyParser());
 app.set("port", process.env.PORT || user.port);
@@ -19,7 +19,6 @@ app.use(express.cookieParser("A secret"));
 app.use(express.session());
 app.use(app.router);
 app.use(express.static("public"))
-
 app.get("/", (req, res) => {res.sendfile("index.html", {"root": "../speech/public"})});
 
 //sets up local certifications so Chrome doesnt throw an error
