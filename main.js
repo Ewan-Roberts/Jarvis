@@ -4,24 +4,29 @@
 const   childProc       = require("child_process"),
         spotify         = require("spotify-node-applescript"),
         storage         = require("node-persist"),
-    
-    //Internal libraries
+        
+        //Service calls
+        fetchNewsData   = require("./modules/services/fetchNewsData"),
+        fetchWeatherData = require("./modules/services/fetchWeatherData"),
+        wikiQuery       = require("./modules/services/wikiQuery"),
+        
+        //Internal libraries
         app             = require("./modules/speechServer"),
         boardSetUp      = require("./modules/boardSetUp"),
         digest          = require("./modules/digest"),
         morning         = require("./modules/morning"),
-        fetchNewsData   = require("./modules/fetchNewsData"),
-        fetchWeatherData = require("./modules/fetchWeatherData"),
         welcomeHome     = require("./modules/welcomeHome"),
         event           = require("./modules/event"),
         timer           = require("./modules/timer"),
         piServer        = require("./modules/piServer"),
         spanish         = require("./modules/spanish"),
         io              = require("socket.io").listen(server),
-        musicControls   = require("./modules/musicControls"),
-        wikiQuery       = require("./modules/wikiQuery"),
-        browserControls = require("./modules/browserControls"),
-        user            = require("./modules/userInformation");
+        user            = require("./modules/userInformation"),
+
+        //Over-ride kernal level functions
+        musicControls   = require("./modules/kernal-overide/musicControls"),
+        browserControls = require("./modules/kernal-overide/browserControls");
+        
 
 //Establish link with the front end and handle socket events
 io.on("connection", socket => { 
