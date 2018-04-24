@@ -69,7 +69,7 @@ For the extension the wiring is below, with more information on the extension he
 Once the prerequisites are completed, go to root and run:
 
 ```
-node speechServer.js
+node main.js
 ```
 
 Then load https://localhost:3003/
