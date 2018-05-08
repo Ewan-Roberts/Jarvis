@@ -1,11 +1,10 @@
 "use strict";
 
 const   cheerio = require('cheerio'),
-        request = require('request'),
-        event   = require('../event');
+        request = require('request');
 
 // Need to use the wikipedia API for this, all of this is quite junk code
-event.on("wikiQuery",res => {
+global.event.on("wikiQuery",res => {
 
     request('https://en.wikipedia.org/wiki/' + res, (error, response, html) => {
 
@@ -19,7 +18,7 @@ event.on("wikiQuery",res => {
 
             if($('#mw-content-text').find('p').first().children().text().indexOf("this message may") > -1) {console.log('No result for what you search for')
                 
-                event.emit('wikiResult', 'No results')
+                global.event.emit('wikiResult', 'No results')
             }
 
             if($('#mw-content-text').find('p').first().text().indexOf("may refer") > -1) {
@@ -40,7 +39,7 @@ event.on("wikiQuery",res => {
                         //DRY
                         let info = context.replace(/[`~!@#$%^&*()_|+\-=?;:'"<>\{\}\[\]\\\/]/gi, ' ')
 
-                        event.emit('wikiResult', info)
+                        global.event.emit('wikiResult', info)
                     }
                 })
 
@@ -50,12 +49,12 @@ event.on("wikiQuery",res => {
 
                 let info = context.replace(/[`~!@#$%^&*()_|+\-=?;:'"<>\{\}\[\]\\\/]/gi, ' ')
 
-                event.emit('wikiResult', info)
+                global.event.emit('wikiResult', info)
             }
 
         } else {
 
-            event.emit('error', new Error('browserControl: An unsupported website was passed in'));
+            global.event.emit('error', new Error('browserControl: An unsupported website was passed in'));
 
         }
     })

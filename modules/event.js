@@ -1,8 +1,9 @@
 "use strict";
 //Sets up the global event emitter for each event to hook to
-const EventEmitter = require("events");
+let     EventEmitter    = require("events"),   
+        obj             = new EventEmitter();
 
-module.exports = new EventEmitter();
+global.event = obj;
 
 //Error handing
-module.exports.on("error", (err,msg) => {console.error("Error: ", err)})
+global.event.on("error", (err,msg) => {console.error("Error: ", err)})

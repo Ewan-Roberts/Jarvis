@@ -2,10 +2,9 @@
 
 const   spotify     = require("spotify-node-applescript"),
         childProc   = require("child_process"),
-        event       = require("../event"),
         user        = require("../userInformation");
 
-event.on("musicControls", res => {
+global.event.on("musicControls", res => {
 
     switch(res) {
                 
@@ -42,7 +41,6 @@ event.on("musicControls", res => {
             spotify.getState(obj => {
                 if (obj === null) {return}
                 const volume = obj.state;
-                
                 if(volume >= 20) {spotify.volumeDown()}
 
             })
@@ -59,16 +57,14 @@ event.on("musicControls", res => {
 
         case "half":
 
-            childProc.exec("osascript -e 'set Volume 3'");
-
-            spotify.setVolume(50);
+            childProc.exec("osascript -e 'set Volume 4'");
+            spotify.setVolume(40);
 
             break;
 
         case "low":
 
             childProc.exec("osascript -e 'set Volume 2'");
-
             spotify.setVolume(40);
 
             break;
@@ -76,14 +72,13 @@ event.on("musicControls", res => {
         case "high":
 
             childProc.exec("osascript -e 'set Volume 6'");
-
             spotify.setVolume(60);
 
             break;
     }
 })
 
-event.on("playTrack", uri => {
+global.event.on("playTrack", uri => {
 
     if(typeof uri !== 'undefined') {
 
@@ -95,5 +90,5 @@ event.on("playTrack", uri => {
     }
 })
 
-event.on("playUserPlaylist", () => {spotify.playTrackInContext(user.track, user.spotifyUser+user.spotifyPlaylist)})
+global.event.on("playUserPlaylist", () => {spotify.playTrackInContext(user.track, user.spotifyUser+user.spotifyPlaylist)})
 

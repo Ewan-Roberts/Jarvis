@@ -1,39 +1,25 @@
 "use strict";
 
 const   spotify = require("spotify-node-applescript"),
-        user    = require("./userInformation"),
-        event   = require("./event");
+        user    = require("./userInformation")
 
 // the below fires on conditions in timer.js
-event.on("morning", () => {
+global.event.on("morning", () => {
 
-    console.log("start morning")
+    spotify.playTrack(user.morning_track);
 
-    event.emit("checkStatus");
-
-    spotify.playTrack(user.morningTrack);
-
-    event.emit("musicControls","half");
-
-    event.emit("musicControls","play");
+    global.event.emit("musicControls","half");
+    
+    global.event.emit("musicControls","play");
 
     // give the user some time to wake up before you start turning on lights and telling the news 
-    setTimeout(() => {
-                        
-        event.emit("fetchWeatherData")
-
+    setTimeout(() => {global.event.emit("fetchWeatherData")
     }, 48000);
 
-    setTimeout(() => {
-             
-        event.emit("fetchNewsData")
-
+    setTimeout(() => {global.event.emit("fetchNewsData")
     }, 60000);
 
-    setTimeout(() => {
-             
-        event.emit("spanish")
-
+    setTimeout(() => {global.event.emit("spanish")
     }, 140000);
 })
 

@@ -2,92 +2,74 @@
 
 const   moment      = require("moment"),
         user        = require('./userInformation'),
-        event       = require("./event"),
         isItDaytime = require("./isItDaytime");
 
 //If the user wants to override the motion sensing, refereshs each server reboot
-let override = false;
+user.override = false;
 
-let amount = override?200:100;
+let amount = user.override?100:60;
 
 //Time untill, after not being reset the lights will turn themselves off
-let timeDiff = moment().add(amount,"minutes").format("HH:mm");
+let time_diff = moment().add(amount,"minutes").format("HH:mm");
 
 // Send a sentence to the front end when a time is matched
-const timeEvent = (time, diff, eventName,cmd) => {
+const time_event = (time, diff, event_name,cmd) => {
 
     if (time === diff) {
            
-        event.emit(eventName, cmd);    
+        global.event.emit(event_name, cmd);    
     }
 }
 
 // Minute clock that triggers time based prompts
 setInterval(() => {
 
-    let currentTime = moment().format("HH:mm");
+    let current_time = moment().format("HH:mm");
 
-    console.log(currentTime)
+    if(!user.override) {
 
-    // console.log("--" + timeDiff)
-
-    if(!override) {
-
-        timeEvent(currentTime,user.morningAlarm, "morning");
-
-        timeEvent(currentTime,user.resetUser, "resetUserHome");
-
-        timeEvent(currentTime,user.bedtime, "speechFromBackEnd", "bedtime Ewan");
+        time_event(current_time,user.morning_alarm, "morning");
+        time_event(current_time,user.reset_user, "resetUserHome");
+        time_event(current_time,user.bedtime, "speechFromBackEnd", "bedtime Ewan");
 
     }
 
-    timeEvent(currentTime,timeDiff,"override",false);
-
-    timeEvent(currentTime,timeDiff,"allLights",false);
+    time_event(current_time,time_diff,"override",false);
+    time_event(current_time,time_diff,"allLights",false);
 
 }, 60000);
 
-// When motion from any sensor is detected and override is false do the callback
-event.on("motion", callback => {
-
-    if(!override && isItDaytime()){
-
-        callback()
-    }
-})
-
-//On startup chgeck if the piServer is connected and if the browser is open
-setTimeout(() => {
-
-    event.emit('checkStatus');
-
-    event.emit('checkPiStatus');
-
-}, 20000);
 
 //When motion is sensed reset the time since last movement
-event.on("resetMovementTimer", () => {timeDiff = moment().add((override?200:100),"minutes").format("HH:mm")});
+global.event.on("resetMovementTimer", () => {time_diff = moment().add((user.override?100:60),"minutes").format("HH:mm")});
 
 //Stop certain functionality if the user overrides
-event.on("override", bool => {
-    console.log('override = ' + bool)
+global.event.on("override", bool => {
 
     if(bool === undefined){
-        bool = !override
+        bool = !user.override
     }
 
     if(bool){
 
-        override = true
-        
-        event.emit("speechFromBackEnd", "Everything disabled for " + (override?"2 hours":"1 hour"));  
-
-        event.emit("allLights",false);
+        user.override = true
+        global.event.emit("speechFromBackEnd", "Everything disabled for " + (user.override?"2 hours":"1 hour"));  
+        global.event.emit("allLights",false);
        
     } else {
 
-        override = false
+        user.override = false
 
-        event.emit("allLights",true);
     }
 });
+
+
+
+// //On startup chgeck if the piServer is connected and if the browser is open
+// setTimeout(() => {
+
+//     global.event.emit('checkStatus');
+
+//     global.event.emit('checkPiStatus');
+
+// }, 20000);

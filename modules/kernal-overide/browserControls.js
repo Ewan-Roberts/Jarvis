@@ -1,12 +1,11 @@
 "use strict";
 
-const childProc = require("child_process"),
-    event = require("../event"),
-    spotify = require("spotify-node-applescript"),
-    digest = require("../digest"),
-    user = require("../userInformation");
+const   childProc   = require("child_process"),
+        spotify     = require("spotify-node-applescript"),
+        digest      = require("./../digest"),
+        user        = require("../userInformation");
 
-event.on("openApplication", res => {
+global.event.on("openApplication", res => {
 
     switch (res) {
 
@@ -26,11 +25,11 @@ event.on("openApplication", res => {
         case "YouTube": childProc.exec("open -a 'Google Chrome' --new --args --ingognito https://www.youtube.com/");
         break;
 
-        default: event.emit("error", new Error("browserControl: An unsupported website was passed in"));
+        default: global.event.emit("error", new Error("browserControl: An unsupported website was passed in"));
     }
 })
 
-event.on("applicationSearch", res => {
+global.event.on("applicationSearch", res => {
 
     if(res.vessel === "Facebook") {childProc.exec("open -a 'Google Chrome' --new --args https://www.facebook.com/search/top/?q=" + res.search)}
 
@@ -38,7 +37,7 @@ event.on("applicationSearch", res => {
 
 })
 
-event.on("screen", cmd => {
+global.event.on("screen", cmd => {
 
     const bool = digest(cmd)
 
@@ -46,7 +45,7 @@ event.on("screen", cmd => {
 
 });
 
-event.on("updateSpotifyStates", () => {
+global.event.on("updateSpotifyStates", () => {
 
     // spotify.getState(state => {event.emit("trackTimeInfo", state)});
 

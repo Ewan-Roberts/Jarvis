@@ -1,31 +1,28 @@
 "use strict";
 
 const   request = require("request"),
-        moment  = require("moment"),
-        user    = require("../userInformation"),
-        event   = require("../event");
+        user    = require("../userInformation");
 
 // Pulls from userInformation file
-event.on("fetchNewsData", () => {
+global.event.on("fetchNewsData", () => {
 
-    console.log("news call")
 	// needs athe api key and user name to work
-	if(user.newsKey && user.userName) {
+	if(user.news_key && user.user_name) {
 
-	    request("http://api.nytimes.com/svc/mostpopular/v2/mostviewed/politics/1.json?&api-key="+user.newsKey, (error, response,body) => {
+	    request("http://api.nytimes.com/svc/mostpopular/v2/mostviewed/politics/1.json?&api-key="+user.news_key, (error, response,body) => {
 
-	        if (error){event.emit("error", "fetchNewsData: " + error)}
+	        if (error){global.event.emit("error", "fetchNewsData: " + error)}
 
 	        const obj = JSON.parse(body);
 
-	       	obj.name = user.userName
+	       	obj.name = user.user_name
 
-	        event.emit("news", obj);
+	        global.event.emit("news", obj);
 	    });		
 	
 	} else {
 
-	    event.emit("error", "fetchNewsData: You have not set an API key and name for the news API, go to http://api.nytimes.com, get one and add it to the userInformation file please")
+	    global.event.emit("error", "fetchNewsData: You have not set an API key and name for the news API, go to http://api.nytimes.com, get one and add it to the userInformation file please")
 	}
 });
 
