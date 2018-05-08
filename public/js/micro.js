@@ -16,19 +16,35 @@ jQuery(document).ready($ =>{
         
         responsiveVoice.speak(data.english, "UK English Male", {rate: 0.8, onend: function() {
 
-            responsiveVoice.speak(data.spanish, "Spanish Female", {rate: 0.9, onend: function() {
-
-                $(".leftTab").fadeOut("slow") 
-                
-                $(".weatherTab").fadeOut("slow")
-
-            }})
+            responsiveVoice.speak(data.spanish, "Spanish Female", {rate: 0.9})
 
         }})
+
+        $(".leftTab").fadeOut("slow") 
+                
+        $(".weatherTab").fadeOut("slow")
 
     })
 
     socket.on("refreshBrowser", () => {window.location.reload()})
+
+    socket.on("spanishWord", res => {
+
+        console.log(res)
+
+        responsiveVoice.speak(res.name, "Spanish Female", {rate: 0.9, onend: () => {
+
+            annyang.addCommands({[res.detail]: () => {
+                
+                console.log('nailed it')
+
+            }});
+
+            console.log(annyang)
+
+        }})
+
+    })
 
     socket.on("wikiResult", res => {responsiveVoice.speak(res, "UK English Male", {rate: 0.9})})
 
@@ -38,10 +54,12 @@ jQuery(document).ready($ =>{
     $(".inputTime").keyup(function() {
         var value = $( this ).val();
         
-        if(value === "toggle"){
-            socket.emit("bedroomLightToggle")
+        if(value === "toggle on"){
+            socket.emit("bedroomRightToggle")
         }
-
+        if(value === "toggle off"){
+            socket.emit("bedroomRightToggle")
+        }
         if(value === "bathroom on"){
             socket.emit("bathroomLight", true)
         }
@@ -66,7 +84,10 @@ jQuery(document).ready($ =>{
         }       
         if(value === "morning"){
             socket.emit("morning")
-        }   
+        }
+        if(value === "quizz"){
+            socket.emit("spanishQuestion")
+        } 
         console.log(value)
 
     }).keyup();
