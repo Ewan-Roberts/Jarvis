@@ -11,7 +11,7 @@ An example of an extension can be found here: [Jarvis Extension](https://github.
 To get started, clone the repository and install the required dependencies:
 
 ```
-git clone https://github.com/vanguard12/Jarvis.git
+git clone https://github.com/Ewan-Roberts/Jarvis.git
 
 npm install
 ```
